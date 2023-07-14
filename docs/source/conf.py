@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'GRIST模式教程'
+copyright = '2023, GRIST-Dev'
+author = 'GRIST-Dev'
 
 release = '0.1'
 version = '0.1.0'
@@ -34,5 +34,4 @@ html_theme = 'sphinx_rtd_theme'
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
 
-# Change Sphinx's master_doc setting 'contents' to 'index'
 master_doc = 'index'

@@ -17,4 +17,5 @@ GRIST模式教程
    output
    application
    appendix
+   references
    support

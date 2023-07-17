@@ -29,7 +29,7 @@
           ···
             type(scalar_2d_field)  :: uwind #添加声明变量（如1d-2d需有不同声明）
           ···
-       end type gcm_diag_accu_vars_2d
+    end type gcm_diag_accu_vars_2d
     ···
     call wrap_allocate_data2d(mesh,nlev ,diag_phys_accu_vars_h1_2d%uwind)
     #为变量分配内存

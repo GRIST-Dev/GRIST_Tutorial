@@ -17,7 +17,9 @@ GRIST模式教程
    output
    application
    appendix
+   grid
    static
    initial
+   forcing
    references
    support

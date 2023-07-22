@@ -7,11 +7,16 @@
     - Lapack库
     - 编译器
 
-  namelist设置：
-    #. 编译grs
-    #. 编译GRIST主程序
-    #. 准备前处理数据
-    #. 运行模式
+  输入数据集：  
+  GRIST所需的原始静态数据集封装在geog_raw_data中，默认数据如下：
+    #. 地形高度：ncar_cube_topo_data/ usgs-rawdata.nc（800m分辨率，由内置的NCAR_Topography软件处理，详见topo.nl）;
+    #. 陆面类型：modis_landuse_20class_30s_with_lakes（800m分辨率，21种类型，水体编号17、冰编号15、湖编号21，详见数据index文件）；
+    #. 土表类型：soiltype_top_30s（800m分辨率，16种类型）；
+    #. 土壤温度：soiltemp_1deg（1°分辨率）；
+    #. 雪最大反照率：maxsnowalb（1°分辨率）；
+    #. 逐月平均植被覆盖比：greenfrac_fpar_modis（800m分辨率）；
+    #. 逐月平均地表反照率：albedo_ncep（0.144°分辨率）
+    #. 重力波拖曳相关量：根据模式网格分辨率自动选择orogwd_2deg（2°分辨率）、orogwd_1deg（1°分辨率）、orogwd_30m（800m分辨率）。
 
 编译GRIST_lib库
   该步骤包括使用GNU make命令(gmake)编译和链接GRIST_lib库文件。用户需根据计算机运行环境在编译目录中修改Makefile文件。然后执行gmake命令完成编译。

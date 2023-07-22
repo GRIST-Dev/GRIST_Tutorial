@@ -35,23 +35,22 @@
 
   串行运行执行文件，从原始数据制作静态数据大概需要25分钟左右，运行完成会生成static.nc，即为主程序所需的同分辨率静态数据。
 
-  #. grist.nml设置参考：
-  gridFilePath：模式网格数据路径；
-  gridFileHeadName：模式网格数据名称，静态数据将与该网格相匹配；
-  gridRegionFileHeadName：有限区域模式网格数据名称，详见有限区域模式的静态数据制作；
-  mesh_nv：模式网格数
-  #. grist_init.nml设置参考
-     geog_data_path：原始静态数据集路径；
-     static_path：指定static.nc路径；
-     config_do_staic：是否从原始数据制作；
-     do_regional_domain：是否生成有限区域模式的静态数据；
-     read_static：是否读取当前路径下已有的全球static.nc，与config_do_staic相反，主要用于有限区域模式。
-
-  #. topo.nl为内置地形处理软件NCAR_topography的namelist，设置参考：
-     raw_data_filepath：原始地形数据；
-     do_cube_smooth：是否平滑地形；
-     smooth_times：平滑次数；
-     smooth_method：平滑方法（可选'linear'，'shapiro'，'fv3'，'avg'）。
+    #. grist.nml设置参考：
+       gridFilePath：模式网格数据路径；
+       gridFileHeadName：模式网格数据名称，静态数据将与该网格相匹配；
+       gridRegionFileHeadName：有限区域模式网格数据名称，详见有限区域模式的静态数据制作；
+       mesh_nv：模式网格数
+    #. grist_init.nml设置参考:
+       geog_data_path：原始静态数据集路径；
+       static_path：指定static.nc路径；
+       config_do_staic：是否从原始数据制作；
+       do_regional_domain：是否生成有限区域模式的静态数据；
+       read_static：是否读取当前路径下已有的全球static.nc，与config_do_staic相反，主要用于有限区域模式。
+    #. topo.nl为内置地形处理软件NCAR_topography的namelist，设置参考：
+       raw_data_filepath：原始地形数据；
+       do_cube_smooth：是否平滑地形；
+       smooth_times：平滑次数；
+       smooth_method：平滑方法（可选'linear'，'shapiro'，'fv3'，'avg'）。
 
 用于有限区域模式的静态数据制作
 ----------------

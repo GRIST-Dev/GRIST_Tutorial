@@ -7,7 +7,7 @@
     - Lapack库
     - 编译器
 
-  输入数据集：  
+  原始数据集：  
   GRIST所需的原始静态数据集封装在geog_raw_data中，默认数据如下：
     #. 地形高度：ncar_cube_topo_data/ usgs-rawdata.nc（800m分辨率，由内置的NCAR_Topography软件处理，详见topo.nl）;
     #. 陆面类型：modis_landuse_20class_30s_with_lakes（800m分辨率，21种类型，水体编号17、冰编号15、湖编号21，详见数据index文件）；

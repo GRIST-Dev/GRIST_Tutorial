@@ -20,7 +20,7 @@
 
 编译GRIST_static
   该步骤和编译GRIST主程序相似，进入编译目录bld修改Makefile中 NETCDF和LAPACK路径，修改 EXEDIR 指定执行文件（grist_static.exe）路径。
-  开始编译：
+  开始编译::
 
     $ ./make.sh
 

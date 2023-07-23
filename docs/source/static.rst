@@ -53,32 +53,32 @@ GRIST所需的原始静态数据集封装在geog_raw_data中，默认数据如�
 
 **1. grist.nml设置参考:**
 ::
-     gridFilePath：模式网格数据路径；
-     gridFileHeadName：模式网格数据名称，静态数据将与该网格相匹配；
-     gridRegionFileHeadName：有限区域模式网格数据名称，详见有限区域模式的静态数据制作；
-     mesh_nv：模式网格数
+     gridFilePath='/path/to/gridFile' #模式网格数据路径；
+     gridFileHeadName='FileHeadName' #模式网格数据名称，静态数据将与该网格相匹配；
+     gridRegionFileHeadName='RegionFileHeadName' #有限区域模式网格数据名称，详见有限区域模式的静态数据制作；
+     mesh_nv=${mesh} #模式网格数
 
 **2. grist_init.nml设置参考:**
 ::
-       geog_data_path：原始静态数据集路径；
-       static_path：指定static.nc路径；
-       config_do_staic：是否从原始数据制作；
-       do_regional_domain：是否生成有限区域模式的静态数据；
-       read_static：是否读取当前路径下已有的全球static.nc，与config_do_staic相反，主要用于有限区域模式。
+       geog_data_path='/path/to/geog_data' #原始静态数据集路径；
+       static_path='path/to/static.nc' #指定static.nc路径；
+       config_do_staic=.true. #是否从原始数据制作；
+       do_regional_domain=.true. #是否生成有限区域模式的静态数据；
+       read_static=.false. #是否读取当前路径下已有的全球static.nc，与config_do_staic相反，主要用于有限区域模式。
 
 **3. topo.nl为内置地形处理软件NCAR_topography的namelist，设置参考:**
 ::
-       raw_data_filepath：原始地形数据；
-       do_cube_smooth：是否平滑地形；
-       smooth_times：平滑次数；
-       smooth_method：平滑方法（可选'linear'，'shapiro'，'fv3'，'avg'）。
+       raw_data_filepath='/path/to/raw_data' #原始地形数据；
+       do_cube_smooth=.true. #是否平滑地形；
+       smooth_times=num #平滑次数；
+       smooth_method='linear' #平滑方法（可选'linear'，'shapiro'，'fv3'，'avg'）。
 
 用于有限区域模式的静态数据制作
 ----------------
 有限区域模式静态数据制作流程与全球模式类似，需准备有限区域网格数据（包括有限区域网格、同路径下对应的全球网格，全球-区域index对应关系文件，详见网格数据制作），在grist.nml和grist_init.nml里设置:
 ::
-    gridRegionFileHeadName：有限区域模式网格数据名称；
-    do_regional_domain：.true.
-    read_static：如果已存在对应全球网格的静态数据，可以直接使用，会极大减少运行时间
+    gridRegionFileHeadName='RegionFileHeadName' #有限区域模式网格数据名称；
+    do_regional_domain=.true. #设为true开启有限区域模式静态数据制作;
+    read_static=.true. #如果已存在对应全球网格的静态数据，可以直接使用，会极大减少运行时间;
 
 

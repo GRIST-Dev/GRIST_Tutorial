@@ -31,7 +31,7 @@
 运行GRIST_static
   根据用户需求设置grist.nml、grist_init.nml、topo.nl，执行
 
-  $ ./sbatch.sh
+    $ ./sbatch.sh
 
   串行运行执行文件，从原始数据制作静态数据大概需要25分钟左右，运行完成会生成static.nc，即为主程序所需的同分辨率静态数据。
 

@@ -7,7 +7,6 @@
     - NetCDF库（推荐版本：3.6.3）
     - Lapack库（推荐版本：3.8.0）
     - 编译器和MPI.（推荐版本：Intel2018）
-上述配置环境的编译安装详见各软件的说明手册，本手册中不展开说明。
 
 制作静态数据需要以下几个步骤：
     #.	构建输入数据集。
@@ -16,7 +15,7 @@
 
 构建输入数据集:  
 >>>>>>>>>
-    GRIST所需的原始静态数据集封装在geog_raw_data中，默认数据如下：
+GRIST所需的原始静态数据集封装在geog_raw_data中，默认数据如下：
       #. 地形高度：ncar_cube_topo_data/ usgs-rawdata.nc（800m分辨率，由内置的NCAR_Topography软件处理，详见topo.nl）;
       #. 陆面类型：modis_landuse_20class_30s_with_lakes（800m分辨率，21种类型，水体编号17、冰编号15、湖编号21，详见数据index文件）；
       #. 土表类型：soiltype_top_30s（800m分辨率，16种类型）；
@@ -28,9 +27,10 @@
 
 编译GRIST_static
 >>>>>>>>>
-    该步骤和编译GRIST主程序相似，进入编译目录bld修改Makefile中 NETCDF和LAPACK路径，修改 EXEDIR 指定执行文件（grist_static.exe）路径。
+该步骤和编译GRIST主程序相似，进入编译目录bld修改Makefile中 NETCDF和LAPACK路径，修改 EXEDIR 指定执行文件（grist_static.exe）路径。
 
-*开始编译*
+开始编译
+:::::::::
 ::
 
      # 进入编译目录
@@ -45,21 +45,20 @@
 
 运行GRIST_static
 >>>>>>>>>
-  根据用户需求设置grist.nml、grist_init.nml、topo.nl，执行::
+根据用户需求设置grist.nml、grist_init.nml、topo.nl，执行::
 
      $ ./sbatch.sh
 
-  串行运行执行文件，从原始数据制作静态数据大概需要25分钟左右，运行完成会生成static.nc，即为主程序所需的同分辨率静态数据。
+串行运行执行文件，从原始数据制作静态数据大概需要25分钟左右，运行完成会生成static.nc，即为主程序所需的同分辨率静态数据。
 
-
-1. grist.nml设置参考:
+**1. grist.nml设置参考:**
 ::
      gridFilePath：模式网格数据路径；
      gridFileHeadName：模式网格数据名称，静态数据将与该网格相匹配；
      gridRegionFileHeadName：有限区域模式网格数据名称，详见有限区域模式的静态数据制作；
      mesh_nv：模式网格数
 
-2. grist_init.nml设置参考:
+**2. grist_init.nml设置参考:**
 ::
        geog_data_path：原始静态数据集路径；
        static_path：指定static.nc路径；
@@ -67,7 +66,7 @@
        do_regional_domain：是否生成有限区域模式的静态数据；
        read_static：是否读取当前路径下已有的全球static.nc，与config_do_staic相反，主要用于有限区域模式。
 
-3. topo.nl为内置地形处理软件NCAR_topography的namelist，设置参考:
+**3. topo.nl为内置地形处理软件NCAR_topography的namelist，设置参考:**
 ::
        raw_data_filepath：原始地形数据；
        do_cube_smooth：是否平滑地形；

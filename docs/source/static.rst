@@ -89,6 +89,7 @@ namelist参考样例（使用G8分辨率网格）
     outdir                 = './'
     gridFilePath           = '/THL8/home/zhangyi/public/GRIST/data/uniform-g8/grid/'    
     gridFileHeadName       = 'grist.grid_file.g8.ccvt'
+    gridRegionFileHeadName = 'grist.grid_file.newg6_lam.c5n180e.ccvt'
     /
     &swe_para
     /

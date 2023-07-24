@@ -60,7 +60,7 @@ GRIST所需的原始静态数据集封装在geog_raw_data中，默认数据如�
 
 **2. grist_init.nml设置参考:**
 ::
-       geog_data_path='/path/to/geog_data' #原始静态数据集路径；
+       geog_data_path='/path/to/geog_raw_data' #原始静态数据集路径；
        static_path='path/to/static.nc' #指定static.nc路径；
        config_do_staic=.true. #是否从原始数据制作；
        do_regional_domain=.true. #是否生成有限区域模式的静态数据；

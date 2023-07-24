@@ -81,4 +81,71 @@ GRIST所需的原始静态数据集封装在geog_raw_data中，默认数据如�
     do_regional_domain=.true. #设为true开启有限区域模式静态数据制作;
     read_static=.true. #如果已存在对应全球网格的静态数据，可以直接使用，会极大减少运行时间;
 
+namelist参考样例（使用G8分辨率网格）
+**1. grist.nml**
+::
+    &ctl_para
+    outdir                 = './'
+    gridFilePath           = '/THL8/home/zhangyi/public/GRIST/data/uniform-g8/grid/'    
+    gridFileHeadName       = 'grist.grid_file.g8.ccvt'
+    /
+    &swe_para
+    /
+    &dycore_para
+    /
+    &tracer_para
+    /
+    &mesh_para
+    mesh_nv                = 655362
+    /
+    &ccvt_para
+    /
+
+**2. grist_init.nml**
+::
+    &share
+    start_date = '2012-05-26_00:00:00'
+    end_date   = '2012-05-26_00:00:00'
+    interval_seconds = 21600
+    io_form_geogrid = 2,
+    /
+    &mesh_plot
+    config_mesh_plot = .false.
+    /
+    &ungrib
+    out_format = 'WPS',
+    prefix = 'ForGrist',
+    /
+    &static_para
+    geog_data_path = '/THL8/home/zhangyi/grist_static/geog_raw_data/',
+    static_path = './',
+    config_do_staic = .true.
+    do_regional_domain     = .false.
+    read_static     = .false.
+    config_do_init_condition = .false.
+    /
+    &gfs_para
+    grist_data_date  = '2012-05-26_00'
+    config_nfglevels = 27
+    nSoilLevels = 4
+    /
+    &physics_para
+    ozone_data_path  = '/g13/zhangyi/mac/run/grist_landData/grist_init/geog_data/ozone_1.9x2.5_L26_2000clim_c091112.nc'
+    config_do_ozone  = .false.
+    /
+
+**3. topo.nl**
+    &topoparams
+    raw_data_filepath = '/THL8/home/zhangyi/grist_static/geog_raw_data/ncar_cube_topo_data/'
+    externally_smoothed_topo_file   = 'inputdata/externally-smoothed-PHIS/USGS-gtopo30_ne30np4_16xdel2.nc'
+    lsmooth_terr = .false.
+    lexternal_smooth_terr = .true.
+    lzero_out_ocean_point_phis = .false.
+    res_cube  = 18
+    do_sgh    = .false.
+    do_cube_smooth= .false.
+    smooth_times  = 1
+    smooth_method = 'linear'
+    /
+
 

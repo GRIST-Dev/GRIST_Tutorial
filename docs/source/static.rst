@@ -82,7 +82,7 @@ GRIST所需的原始静态数据集封装在geog_raw_data中，默认数据如�
     read_static=.true. #如果已存在对应全球网格的静态数据，可以直接使用，会极大减少运行时间;
 
 namelist参考样例（使用G8分辨率网格）
-
+----------------
 **1. grist.nml**
 ::
     &ctl_para

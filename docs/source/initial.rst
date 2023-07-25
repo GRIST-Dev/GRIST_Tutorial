@@ -16,7 +16,7 @@
 ~~~~~~~~~~~~~~~~
 此步骤需先下载ERA5或GFS再分析数据作为GRIST初值的原始数据，然后将其转化为nc格式，其中初值数据包括：
   1.	气压层数据：T（温度）、U（纬向风）、V（经向风）、比湿（Q）。
-  2.	单层数据：PS（气压）、SOILH（重力位势）、SoilMoist（土壤湿度、一般有4层）、SKINTEMP（表面温度）、XICE（海冰面积）、SNOW（雪密度）、SNOWH（雪深）。
+  2.	单层数据：PS（气压）、SOILH（重力位势）、SoilMoist（土壤湿度、一般有4层）、SoilTemp（土壤温度、一般有4层）、SKINTEMP（表面温度）、XICE（海冰面积）、SNOW（雪密度）、SNOWH（雪深）。
 下载对应数据后，运行step1_convert.sh对数据格式进行转换，以下为step1_convert.sh设置参考（以ERA5数据为例）：
 ::
   pathin='/path/to/initdata' #设置原始初值数据读取路径

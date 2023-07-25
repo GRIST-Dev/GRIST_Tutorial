@@ -2,94 +2,216 @@
 ================
 用于全球模式的初值数据制作
 ----------------
-  输入数据集：
-    - METIS库.（推荐版本：5.1.0）
-    - NetCDF库（推荐版本：3.6.3）
-    - PnetCDF库（推荐版本：1.12.2）
-    - Lapack库（推荐版本：3.8.0）
-    - 编译器和MPI.（推荐版本：Intel2018）
+  初值数据制作前需配置好依赖环境，推荐使用以下几个文件处理软件制作初值数据，括号中为推荐的软件版本：
+    - NCO（推荐版本：4.7.6）
+    - CDO（推荐版本：2.0.5）
 
-  namelist设置：
-    #. 编译grs
-    #. 编译GRIST主程序
-    #. 准备前处理数据
-    #. 运行模式
+  构建初值数据需要以下几个步骤：
+   #.	初值数据前处理
+   #.	重命名初值变量
+   #.	初值变量后处理
 
-编译GRIST_lib库
-  该步骤包括使用GNU make命令(gmake)编译和链接GRIST_lib库文件。用户需根据计算机运行环境在编译目录中修改Makefile文件。然后执行gmake命令完成编译。
-
-编译GRIST主程序
-  该步骤和上述步骤相似。其流程和编译GRIST_lib一致：进入编译目录，修改Makefile文件，修改后执行make.sh命令完成编译。
-
-准备前处理数据
-  该步骤生成模式运行所必要的前处理文件，包括网格文件，初/边值条件文件以及静态数据文件。
-
-运行模式
-  这一步包括可执行文件的实际调用。当运行模式并行运行时，需要调用MPI可执行文件。在大多数高性能计算（HPC）平台上，一般通过批处理队列系统访问计算资源。（不同HPC平台批处理命令各有差异，需根据实际情况修改）。
-
-用于有限区域模式的初值数据制作
-----------------
-  下面几小节中会给出交互式shell命令来编译和运行GRIST模式。大部分情况下，建议将这些步骤封装在shell脚本中。这样做最重要的优点是它可以记录每一步用户所做的运行步骤。
-
-编译GRIST_lib库
-~~~~~~~~~~~~~~~~
-  首先进入grist_lib库的编译目录::
-
-    $ cd ${GRIST_HOME}/src/grist_lib/bld
+初值数据前处理
+此步骤需先下载ERA5或GFS再分析数据作为GRIST初值的原始数据，然后将其转化为nc格式，其中初值数据包括：
+  1.	气压层数据：T（温度）、U（纬向风）、V（经向风）、比湿（Q）。
+  2.	单层数据：PS（气压）、SOILH（重力位势）、SoilMoist（土壤湿度、一般有4层）、SKINTEMP（表面温度）、XICE（海冰面积）、SNOW（雪密度）、SNOWH（雪深）。
+下载对应数据后，运行step1_convert.sh对数据格式进行转换，以下为step1_convert.sh设置参考（以ERA5数据为例）：
+::
+  pathin='/path/to/initdata' #设置原始初值数据读取路径
+  pathou='/path/to/output' #设置初值数据生成路径
+  res="G8UR" #网格名
+  cdo_grid_file=/path/to/grist_scrip_gridnum.nc #设置模式网格描述文件路径（模式网格描述文件的生成请参考模式网格生成部分）
+  cdo -f nc copy ${pathin}/${file} ${pathou}/${file}.tmp0.nc #将GRIB格式文件转化为nc格式
+  cdo setmisstoc,0 ${pathou}/${file}.tmp0.nc ${pathou}/${file}.tmp.nc #将海洋缺省值设为0
+  cdo -P 6 remapycon,${cdo_grid_file} ${pathou}/${file}.tmp.nc ${pathou}/${file}.${res}.nc #将初始场数据插值到模式网格
   
-  然后修改Makefile文件中的编译选项：修改 FC、 CC 和 CXX选项来指定 Fortran、 C 和 CXX的编译器(对于 Intel 编译器，示例配置为: FC = mpifort，CC = mpiicc，CXX = mpiicpc)。然后修改 METIS _ LIB 指定 METIS lib 目录。
-  以上步骤完成后，输入::
+重命名初值变量
+此步骤通过运行step2_rename.sh将插值好的初值文件变量名改为模式适用的初值，以下为step2_rename.sh参考设置:
+::
+  res=G8UR #网格分辨率
+  pathou='/path/to/output' #输出文件路径
+  lev_type=pl #数据垂直层类型
+  cdo chname,var130,T,var131,U,var132,V,var133,Q ${pathin}/ERA5.${lev_type}.${year}${mon}${day}.00.grib.${res}.nc ${pathou}/initial_${res}_${lev_type}_${year}${mon}${day}.nc #将对应变量重命名为模式适用变量名
+  cdo chname,var134,PS,var129,SOILH,var235,SKINTEMP,var31,XICE,var39,SoilMoist_lv1,var40,SoilMoist_lv2,var41,SoilMoist_lv3,var42,SoilMoist_lv4,\
+  var139,SoilTemp_lv1,var170,SoilTemp_lv2,var183,SoilTemp_lv3,var236,SoilTemp_lv4,var33,SNOW,var141,SNOWH,\ 
+  ${pathin}/ERA5.sf.${year}${mon}${day}.00.grib.${res}.nc    ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc #同上，但为单层变量设置
+  ncks -v SNOW          ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/snow.nc #选取降雪数据并保存为snow.nc
+  ncks -v SNOWH         ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/snowh.nc #选取雪深数据并保存为snowh.nc
+  ncks -v SOILH         ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/soilh.nc #选取重力位势数据并保存为soilh.nc
+  ncks -x -v SNOW,SOILH ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/newbase.nc #选取降雪，SOILH数据并保存为newbase.nc
+  cdo mul ${pathou}/snow.nc      ${pathou}/snowh.nc ${pathou}/snow1.nc #计算得到snow初值
+  cdo expr,'SOILH=SOILH/9.80616' ${pathou}/soilh.nc ${pathou}/soilh1.nc #计算得到soilh初值
+  ncks -A ${pathou}/snow1.nc ${pathou}/newbase.nc #拼接snow1.nc和newbase.nc文件
+  ncks -A ${pathou}/soilh1.nc ${pathou}/newbase.nc #拼接soilh1.nc和newbase.nc文件
+  mv ${pathou}/newbase.nc ${pathou}/initial_${res}_sf_${year}${mon}${day}.nc #将newbase.nc重命名为模式初始场读取格式。
 
-    $ make lib
-  等待编译完成。
+初值变量后处理
+此步骤通过运行step3_post.sh脚本进一步对初值文件进行整理，使其符合GRIST模式的读取需求，以下是step3_post.sh脚本的设置参考：
+::
+  lvname=plev #垂直坐标变量名
+  ncks -d time,0 ${pathin}/initial_${res}_${lev_type}_${year}${mon}${day}.nc  initial_${res}.dim1.nc #选取第一个时间维度的变量作为初始场（如果有多个时间维度）
+  ncwa -a time initial_${res}.dim1.nc tmp.nc #去除时间维度
+  ncpdq -a ncells,${lvname} tmp.nc ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc #调换ncells和垂直坐标位置。
+  cdo selname,SoilTemp_lv1 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.st1.nc #提取SoilTemp_lv1变量
+  ncrename -v SoilTemp_lv1,SoilTemp tmp.st1.nc #将SoilTemp_lv1 重命名为SoilTemp
+  … …
+  cdo selname,SoilTemp_lv4 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.st4.nc #同上但为第四层
+  ncrename -v SoilTemp_lv4,SoilTemp tmp.st4.nc #同上但为第四层
+  cdo merge tmp.st?.nc tmp.st.nc #将四层土壤温度合并到depth维度
+  ncpdq -a ncells,depth tmp.st.nc tmp.st.ncpdq.nc #将ncells和depth维度位置调换
+  cdo selname,XICE,SOILH,SNOWH,SNOW,SKINTEMP,PS grist.initial.${res}_sf_${year}${mon}${day}.nc grist.init.${res}_sf_${year}${mon}${day}.nc #选取单层变量并存为GRIST模式读取格式文件
+  ncks -A tmp.sn.ncpdq.nc grist.init.${res}_sf_${year}${mon}${day}.nc #拼接计算得到的土壤湿度变量
+  ncks -A grist.init.${res}_sf_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc #将单层变量和气压层变量拼接为一个初始场文件。
 
-编译GRIST主程序
+大初值文件制作
 ~~~~~~~~~~~~~~~~
-  GRIST_lib编译完成后，可对GRIST主程序进行编译。首先选择编译的GRIST工作模式并进入该工作模式目录（包括amipc, amipw, gcm, scm, swe），这里以gcm模式的编译为例::
+需指出，GRIST模式在读取比G9网格更细的初值文件时，由于netcdf对文件容量的限制，需单独制作气压层的各变量，并逐一读取。以下为大初值文件的制作参考：
+::
+  cdo selname,U ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.U.${lev_type}.${res}_${year}${mon}${day}.nc #提取U变量并单独存放
+  … …
+  cdo selname,Q ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.Q.${lev_type}.${res}_${year}${mon}${day}.nc #提取Q变量并单独存放
 
-    $ cd ${GRIST_HOME}/bld/build_gcm
-  修改该目录下的Makefile文件：修改 NETCDF、 PNETCDF、 LAPACK 和 METIS来指定对应软件的路径。修改 EXEDIR 指定 GRIST 的可执行文件目录。然后修改 FC 指定 Fortran 编译器。
-  修改完成后，输入::
+有限区域模式的初值制作
+----------------
+有限区域模式的初值由GRIST全球模式提供，运行remap_lam.sh脚本对全球模式处理生成有限区域模式初值。以下为remap_lam.sh的参考设置：
+::
+  ncks -v lon_nv,lat_nv,ps,hps ${inpth}/1d/${fhead}.1d.h1.nc tmp.nc #提取经纬度和表层气压变量
+  ncks -v uPC,vPC,temperature  ${inpth}/2d/${fhead}.2d.h1.nc tmp2.nc #提取U，V和温度等2维变量
+  ncks -d ntracer,0  ${inpth}/3d/${fhead}.3d.h1.nc tmp3a.nc #提取Q变量
+  ncpdq -a ntracer,location_nv,nlev tmp3a.nc tmp3.nc #将Q变量的维度调整为（ntracer,location_nv,nlev）
+  ncrename -d ntracer,time tmp3.nc tmp3b.nc #将ntracer变量重命名为time（便于后面操作）
+  ncks -A tmp2.nc tmp.nc #拼接1d和2d变量
+  ncks -A tmp3b.nc tmp.nc #拼接3d变量
+  cdo remapdis,r1440x720 tmp.nc GRIST.lamData.test.nc #水平插值到经纬度网格
+  ncks --fix_rec_dmn time GRIST.lamData.test.nc GRIST.lamData.test1.nc #将time为设为unlimited
+  cdo remapdis,/THL8/home/zhangyi/zhangyi/grid_generator/run/uniform-g9/lam_grid/grist_scrip_556704.nc GRIST.lamData.test1.nc GRIST.lamData.test2.nc #水平插值到有限区域网格
+  ncpdq -a ncells,nlev,time GRIST.lamData.test2.nc GRIST.lamData.test3.nc #将3d变量的维度调整为（ncells,nlev,time）
+  ncrename -d time,ntracer GRIST.lamData.test3.nc GRIST.lamData.test4.nc #将time维度重新设置为ntracer
+  ncrename -v time,ntracer GRIST.lamData.test4.nc GRIST.lamData.test5.nc #将time变量重命名为ntracer
+操作完成之后，运行rename_lamdata.sh对有限区域模式变量进行重命名，详情请参考下方的示例脚本
 
-    $ ./make.sh
-  对GRIST可执行程序进行编译。
-  如果编译成功，执行目录中会出现两个可执行文件: ${model}.exe 和 parttion.exe。这代表GRIST整个编译流程完成。
+初值制作脚本参考样例（使用G8分辨率网格）
+----------------
+1.step1_convert.sh
+::
+  pathin='/fs2/home/zhangyi/zhouyh/data/download/mcs/init'
+  pathou='../download/netcdf/20080714/'
+  mkdir -p ${pathou}
 
-准备前处理数据
+  hres="G8UR"
+  cdo_grid_file=/fs2/home/zhangyi/wangym/GRIST_Data-master/g8-uniform/grid/grist_scrip_655362.nc
+
+  for file in `ls ${pathin}` ;do
+  if [ "${file##*.}"x = "grib"x ] ;then
+  echo ${file}
+  echo "1) convert grib to netcdf"
+  cdo -f nc copy ${pathin}/${file} ${pathou}/${file}.tmp0.nc
+  # only sea ice fraction has missing, just set to 0
+  cdo setmisstoc,0                 ${pathou}/${file}.tmp0.nc ${pathou}/${file}.tmp.nc
+  echo "2) convert lat-lon to unstructured"
+  cdo -P 6 remapycon,${cdo_grid_file} ${pathou}/${file}.tmp.nc ${pathou}/${file}.${hres}.nc
+  echo "3) clean"
+  rm -rf ${pathou}/${file}.tmp.nc ${pathou}/${file}.tmp0.nc
+  echo "done"
+  fi
+  done
+
+2.step2_rename.sh
 ~~~~~~~~~~~~~~~~
-  在模式运行前需准备前处理数据。其中，网格文件和静态数据为开发者事先生成，用户可根据自身试验需求下载或联系模式支持获取。一般不推荐用户自行生成网格和静态数据，这样做可能会产生意料之外的bug。
-  初/边值条件则需要提前下载相应数据（例如，ERA5、GFS），数据下载后可放入${GRIST_HOME}/data中完成对初/边值条件的初始化，该目录下有gesSST, init和post三个文件，分别存放生成边值条件，生成初始场和初值后处理的示例脚本，详情参考README.md文件，根据自身需求修改示例脚本并运行后生成初/边值条件。
+::
+  res=G8UR
+  pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/raw'
+  lev_type=pl
+  mkdir -p ${pathou}
+  for year in 2008 ;do
+  for mon in 07 ;do
+  for day in 14 ;do
+  pathin=../download/netcdf/${year}${mon}${day}/
+  echo ${year} ${mon} ${day} 
+  if true ;then
+    cdo chname,var130,T,var131,U,var132,V,var133,Q ${pathin}/ERA5.${lev_type}.${year}${mon}${day}.00.grib.${res}.nc ${pathou}/initial_${res}_${lev_type}_${year}${mon}${day}.nc
+    cdo chname,var134,PS,var129,SOILH,var235,SKINTEMP,var31,XICE,\
+        var39,SoilMoist_lv1,var40,SoilMoist_lv2,var41,SoilMoist_lv3,var42,SoilMoist_lv4,\
+        var139,SoilTemp_lv1,var170,SoilTemp_lv2,var183,SoilTemp_lv3,var236,SoilTemp_lv4,\
+        var33,SNOW,var141,SNOWH \
+        ${pathin}/ERA5.sf.${year}${mon}${day}.00.grib.${res}.nc    ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc
+  fi
+  if  true ; then 
+    ncks -v SNOW          ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/snow.nc 
+    ncks -v SNOWH         ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/snowh.nc
+    ncks -v SOILH         ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/soilh.nc
+    ncks -x -v SNOW,SOILH ${pathou}/initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/newbase.nc
 
-运行模式
+    cdo mul ${pathou}/snow.nc      ${pathou}/snowh.nc ${pathou}/snow1.nc
+    cdo expr,'SOILH=SOILH/9.80616' ${pathou}/soilh.nc ${pathou}/soilh1.nc
+    mv ${pathou}/snow1.nc  ${pathou}/snow.nc
+    mv ${pathou}/soilh1.nc ${pathou}/soilh.nc
+
+    ncks -A ${pathou}/snow.nc ${pathou}/newbase.nc
+    ncks -A ${pathou}/soilh.nc ${pathou}/newbase.nc
+    mv ${pathou}/newbase.nc ${pathou}/initial_${res}_sf_${year}${mon}${day}.nc
+    rm -rf initial_${res}_sf_${year}${mon}${day}.tmp.nc ${pathou}/snow.nc ${pathou}/snowh.nc ${pathou}/soilh.nc
+  fi
+  done
+  done
+  done
+3.step3_post.sh
 ~~~~~~~~~~~~~~~~
-  以上步骤完成后，即可运行GRIST。需要指出，所有前处理文件都可以生成后重复使用，如服务器中已存在所需前处理文件，则可以直接进入模式运行阶段。
-  GRIST提供了多个示例脚本来自定义模式配置，这里仍对gcm试验的示例脚本（run_dcmip_tc_g6_rk3o3_rj.sh）进行介绍。其目录在${GRIST_HOME}/run/run_mode_dtp_dcmiptc下。该脚本主要负责修改namelist对模式的各模块进行基本设置（附录namelist中会详细介绍），生成运行模式和提交批处理任务的脚本。
-  用户可根据试验需求修改上述内容，完成自定义设置，完成后，运行脚本::
-    $ ./run_dcmip_tc_g6_rk3o3_rj.sh
-  应当指出，由于GRIST模式发展较为迅速。一些运行脚本可能未能根据实际情况及时更新。如遇到问题，可联系模式支持。
-  等待脚本运行完毕后会生成run.sbatch文件，即模式运行和提交批处理任务脚本。以下是run.sbatch文件的内容，它负责设置环境变量和运行GRIST可执行程序，用户需根据自身计算机环境进行修改::
-
-    #!/bin/sh
-    #!/usr/bin/bash
-    #SBATCH --comment=GCM 
-    #SBATCH -J GCM #任务名称
-    #SBATCH -n ${nproc}#总节点数
-    #SBATCH -p normal #节点名称
-    #SBATCH -o gcm_%j.out #输出
-    #SBATCH -e gcm_%j.err #错误输出
-    
-    ##set runtime environment variables
-    
-    ulimit -s unlimited
-    ulimit -c unlimited
-    
-    module load compiler/intel/composer_xe_2017.2.174 #加载inetl编译器
-    module load mpi/intelmpi/2017.2.174 #加载mpi，以上均需根据计算机环境指定
-    export I_MPI_PMI_LIBRARY=/opt/gridview/slurm17/lib/libpmi.so #加载MPI库
-    export LD_LIBRARY_PATH=/g13/zhangyi/softwares/intel2017/metis-5.1.0/build/Linux-x86_64/libmetis/:${LD_LIBRARY_PATH} #加载
-    srun ./par.exe #运行程序
-
-  修改完run.sbatch文件后，使用sbatch命令提交批处理任务::
-
-    $ sbatch run.sbatch
-  运行完成后等待模式输出结果。
+::
+  res=G8UR
+  pathin='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/raw'
+  pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G8UR'
+  lev_type=pl
+  lvname=plev
+  mkdir -p ${pathou}
+  for year in 2008 ;do
+  for mon in 07 ;do
+  for day in 14 ;do
+  echo ${year}${mon}${day}
+  #2d
+  ncks -d time,0 ${pathin}/initial_${res}_${lev_type}_${year}${mon}${day}.nc  initial_${res}.dim1.nc
+  ncwa -a time initial_${res}.dim1.nc tmp.nc
+  ncpdq -a ncells,${lvname} tmp.nc ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc
+  cdo selname,U ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.U.${lev_type}.${res}_${year}${mon}${day}.nc
+  cdo selname,V ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.V.${lev_type}.${res}_${year}${mon}${day}.nc
+  cdo selname,T ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.T.${lev_type}.${res}_${year}${mon}${day}.nc
+  cdo selname,Q ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.Q.${lev_type}.${res}_${year}${mon}${day}.nc
+  rm -rf initial_${res}.dim1.nc tmp.nc
+  #1d
+  ncks -d time,0 ${pathin}/initial_${res}_sf_${year}${mon}${day}.nc  initial_${res}.dim1.nc
+  ncwa -a time initial_${res}.dim1.nc grist.initial.${res}_sf_${year}${mon}${day}.nc
+  cdo selname,PS grist.initial.${res}_sf_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.PS.${lev_type}.${res}_${year}${mon}${day}.nc
+  cdo selname,SoilTemp_lv1 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.st1.nc
+  ncrename -v SoilTemp_lv1,SoilTemp tmp.st1.nc
+  cdo selname,SoilTemp_lv2 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.st2.nc
+  ncrename -v SoilTemp_lv2,SoilTemp tmp.st2.nc
+  cdo selname,SoilTemp_lv3 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.st3.nc  
+  ncrename -v SoilTemp_lv3,SoilTemp tmp.st3.nc
+  cdo selname,SoilTemp_lv4 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.st4.nc
+  ncrename -v SoilTemp_lv4,SoilTemp tmp.st4.nc
+  cdo merge tmp.st?.nc tmp.st.nc
+  ncpdq -a ncells,depth tmp.st.nc tmp.st.ncpdq.nc
+  cdo selname,SoilMoist_lv1 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.sn1.nc
+  ncrename -v SoilMoist_lv1,SoilMoist tmp.sn1.nc
+  cdo selname,SoilMoist_lv2 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.sn2.nc
+  ncrename -v SoilMoist_lv2,SoilMoist tmp.sn2.nc
+  cdo selname,SoilMoist_lv3 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.sn3.nc
+  ncrename -v SoilMoist_lv3,SoilMoist tmp.sn3.nc
+  cdo selname,SoilMoist_lv4 grist.initial.${res}_sf_${year}${mon}${day}.nc tmp.sn4.nc
+  ncrename -v SoilMoist_lv4,SoilMoist tmp.sn4.nc
+  cdo merge tmp.sn?.nc tmp.sn.nc
+  ncpdq -a ncells,depth tmp.sn.nc tmp.sn.ncpdq.nc
+  cdo selname,XICE,SOILH,SNOWH,SNOW,SKINTEMP,PS grist.initial.${res}_sf_${year}${mon}${day}.nc grist.init.${res}_sf_${year}${mon}${day}.nc
+  ncks -A tmp.sn.ncpdq.nc grist.init.${res}_sf_${year}${mon}${day}.nc
+  ncks -A tmp.st.ncpdq.nc grist.init.${res}_sf_${year}${mon}${day}.nc
+  cp grist.init.${res}_sf_${year}${mon}${day}.nc ${pathou}/grist.init.${res}_sf_${year}${mon}${day}.nc
+  #append  
+  ncks -A grist.init.${res}_sf_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc
+  rm -rf initial_${res}.dim1.nc grist.initial.${res}_sf_${year}${mon}${day}.nc
+  rm -rf tmp*.nc
+  done
+  done
+  done
+4.step4_post.sh
+~~~~~~~~~~~~~~~~
+::

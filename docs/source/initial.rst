@@ -11,7 +11,9 @@
    #.	重命名初值变量
    #.	初值变量后处理
 
+
 初值数据前处理
+~~~~~~~~~~~~~~~~
 此步骤需先下载ERA5或GFS再分析数据作为GRIST初值的原始数据，然后将其转化为nc格式，其中初值数据包括：
   1.	气压层数据：T（温度）、U（纬向风）、V（经向风）、比湿（Q）。
   2.	单层数据：PS（气压）、SOILH（重力位势）、SoilMoist（土壤湿度、一般有4层）、SKINTEMP（表面温度）、XICE（海冰面积）、SNOW（雪密度）、SNOWH（雪深）。
@@ -26,6 +28,7 @@
   cdo -P 6 remapycon,${cdo_grid_file} ${pathou}/${file}.tmp.nc ${pathou}/${file}.${res}.nc #将初始场数据插值到模式网格
   
 重命名初值变量
+~~~~~~~~~~~~~~~~
 此步骤通过运行step2_rename.sh将插值好的初值文件变量名改为模式适用的初值，以下为step2_rename.sh参考设置:
 ::
   res=G8UR #网格分辨率
@@ -46,6 +49,7 @@
   mv ${pathou}/newbase.nc ${pathou}/initial_${res}_sf_${year}${mon}${day}.nc #将newbase.nc重命名为模式初始场读取格式。
 
 初值变量后处理
+~~~~~~~~~~~~~~~~
 此步骤通过运行step3_post.sh脚本进一步对初值文件进行整理，使其符合GRIST模式的读取需求，以下是step3_post.sh脚本的设置参考：
 ::
   lvname=plev #垂直坐标变量名
@@ -64,7 +68,7 @@
   ncks -A grist.init.${res}_sf_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc #将单层变量和气压层变量拼接为一个初始场文件。
 
 大初值文件制作
-~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^^^^^
 需指出，GRIST模式在读取比G9网格更细的初值文件时，由于netcdf对文件容量的限制，需单独制作气压层的各变量，并逐一读取。以下为大初值文件的制作参考：
 ::
   cdo selname,U ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.U.${lev_type}.${res}_${year}${mon}${day}.nc #提取U变量并单独存放
@@ -92,7 +96,7 @@
 
 初值制作脚本参考样例（使用G8分辨率网格）
 ----------------
-1.step1_convert.sh
+**1.step1_convert.sh**
 ::
   pathin='/fs2/home/zhangyi/zhouyh/data/download/mcs/init'
   pathou='../download/netcdf/20080714/'
@@ -116,8 +120,7 @@
   fi
   done
 
-2.step2_rename.sh
-~~~~~~~~~~~~~~~~
+**2.step2_rename.sh**
 ::
   res=G8UR
   pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/raw'
@@ -155,8 +158,7 @@
   done
   done
   done
-3.step3_post.sh
-~~~~~~~~~~~~~~~~
+**3.step3_post.sh**
 ::
   res=G8UR
   pathin='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/raw'
@@ -212,6 +214,55 @@
   done
   done
   done
-4.step4_post.sh
-~~~~~~~~~~~~~~~~
+**4.remap_lam.sh**
 ::
+  inpth=/THL8/home/zhangyi/public/GRIST/run/GRIST_NWP_2021_JJA/hdc/L30/HDC-Beg20210610-hadv33-hnrk3-vadv3-vnrk3/history/atm
+  outpth=./GRIST_lamData
+  mkdir -p ${outpth}
+  cd ${outpth}
+  for f in ${inpth}/1d/*ATM*00.1d.h1.nc ;do
+  fhead=${f:119:37}
+  echo ${fhead}
+  fyear=${fhead:21:4}
+  fmon=${fhead:26:2}
+  echo ${fyear}
+  echo ${fmon}
+  fday=${fhead:29:2}
+  fsec=${fhead:32:5}
+  echo ${fday}
+  echo ${fsec}
+  ncks -v lon_nv,lat_nv,ps,hps ${inpth}/1d/${fhead}.1d.h1.nc tmp.nc
+  cp  ${inpth}/2d/${fhead}.2d.h1.nc tmp1.nc
+  ncks -v uPC,vPC,temperature tmp1.nc tmp2.nc
+  ncks -d ntracer,0  ${inpth}/3d/${fhead}.3d.h1.nc tmp3a.nc
+  ncpdq -a ntracer,location_nv,nlev tmp3a.nc tmp3.nc
+  ncrename -d ntracer,time tmp3.nc tmp3b.nc
+  ncks -A tmp2.nc tmp.nc
+  ncks -A tmp3b.nc tmp.nc
+  cdo remapdis,r1440x720 tmp.nc GRIST.lamData.test.nc
+  ncks --fix_rec_dmn time GRIST.lamData.test.nc GRIST.lamData.test1.nc
+  cdo remapdis,/THL8/home/zhangyi/zhangyi/grid_generator/run/uniform-g9/lam_grid/grist_scrip_556704.nc GRIST.lamData.test1.nc GRIST.lamData.test2.nc
+  ncpdq -a ncells,nlev,time GRIST.lamData.test2.nc GRIST.lamData.test3.nc
+  ncrename -d time,ntracer GRIST.lamData.test3.nc GRIST.lamData.test4.nc
+  ncrename -v time,ntracer GRIST.lamData.test4.nc GRIST.lamData.test5.nc
+  ncks --fix_rec_dmn ncells GRIST.lamData.test5.nc GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
+  ncatted -O -a calendar,ntracer,d,, GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
+  ncatted -O -a axis,ntracer,d,, GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
+  ncatted -O -a standard_name,ntracer,o,c,'tracer type' GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
+  ncatted -O -a units,ntracer,o,c,' ' GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
+  rm -rf tmp*.nc
+  rm -rf GRIST.lamData.test*.nc
+  done
+**5.rename_lamdata.sh**
+::
+  for f in ./GRIST_lamData/GRIST*.nc
+  do
+    echo ${f}
+    ncrename -v hps,HPS ${f}
+    ncrename -v uPC,U ${f}
+    ncrename -v vPC,V ${f}
+    ncrename -v temperature,T ${f}
+    ncrename -v ps,PS ${f}
+    ncrename -v tracerMxrt,Q ${f}
+  done
+ 

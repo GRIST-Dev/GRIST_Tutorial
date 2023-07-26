@@ -75,6 +75,14 @@
   … …
   cdo selname,Q ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.Q.${lev_type}.${res}_${year}${mon}${day}.nc #提取Q变量并单独存放
 
+相应的需要修改namelist中的初值文件读取模式，以下为namelist设置参考：
+::
+  large_atm_file_on      = .true. #开启大文件选项
+  initialAtmUFilePath    = '/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-new/grist.era5.ini.U.pl.G9B3_20080714.nc' #单独读取U
+  initialAtmVFilePath    = '/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-new/grist.era5.ini.V.pl.G9B3_20080714.nc' #单独读取V
+  initialAtmTFilePath    = '/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-new/grist.era5.ini.T.pl.G9B3_20080714.nc' #单独读取T
+  initialAtmQFilePath    = '/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-new/grist.era5.ini.Q.pl.G9B3_20080714.nc' #单独读取Q
+
 有限区域模式的初值制作
 ----------------
 有限区域模式的初值由GRIST全球模式提供，运行remap_lam.sh脚本对全球模式处理生成有限区域模式初值。以下为remap_lam.sh的参考设置：

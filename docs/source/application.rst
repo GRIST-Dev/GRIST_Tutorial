@@ -23,27 +23,20 @@ Namelist配置：
 
 全球30km,15km均匀分辨率NWP配置
 ----------------
-试验协议: 
-业务NWP (冷启动或基于同化)
+试验协议: 业务NWP (冷启动或基于同化)
 
-代码版本: 
-GRIST-A23.6.26
+代码版本: GRIST-A23.6.26
 
-编译选项: 
--fp-model precise -DRRTMG_V381 -DSPIO -DUSE_HALO2 -DUSE_LEAP_YEAR  -convert big_endian -r8 -DAMIPW_PHYSICS -DAMIPW_CLIMATE -DUSE_NOAHMP -DCDATE
+编译选项: -fp-model precise -DRRTMG_V381 -DSPIO -DUSE_HALO2 -DUSE_LEAP_YEAR  -convert big_endian -r8 -DAMIPW_PHYSICS -DAMIPW_CLIMATE -DUSE_NOAHMP -DCDATE
 
-运行目录: 
-30km: GRIST_examples/grist_amipw_g8.tgz
-15km: GRIST_examples/grist_amipw_g9.tgz
+运行目录: 30km: GRIST_examples/grist_amipw_g8.tgz; 15km: GRIST_examples/grist_amipw_g9.tgz
 
-样例示意:
-30km:
+样例示意: 30km:
+
 .. image:: images/GRIST_amipw_g8.png    
    :scale: 100%
    :align: center
-
-15km:
-
+   
 
 参考文献:
 

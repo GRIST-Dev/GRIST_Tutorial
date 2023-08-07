@@ -47,9 +47,9 @@
 
 编译GRIST主程序
 ~~~~~~~~~~~~~~~~
-  GRIST_lib编译完成后，可对GRIST主程序进行编译。首先选择编译的GRIST工作模式并进入该工作模式目录（包括amipc, amipw, gcm, scm, swe），这里以gcm模式的编译为例::
+  GRIST_lib编译完成后，可对GRIST主程序进行编译。首先选择编译的GRIST工作模式并进入该工作模式目录（包括amipc：配置了气候试验物理包，适用于长期历史模拟试验, amipw：配置了天气试验物理包，适用于天气预报类型的数值模拟, gcm：配置了简单的物理包，适用于三维大气动力框架测试, scm：单柱模式，主要用于测试物理包以及动力和物理的耦合, swe：简单的2维浅水模型），这里以amipw模式的编译为例::
 
-    $ cd ${GRIST_HOME}/bld/build_gcm
+    $ cd ${GRIST_HOME}/bld/build_amipw
   修改该目录下的Makefile文件：修改 NETCDF、 PNETCDF、 LAPACK 和 METIS来指定对应软件的路径。修改 EXEDIR 指定 GRIST 的可执行文件目录。然后修改 FC 指定 Fortran 编译器。
   修改完成后，输入::
 

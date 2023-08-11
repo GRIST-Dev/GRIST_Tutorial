@@ -21,8 +21,8 @@
   hres="G8UR" #网格名
   cdo_grid_file=/path/to/grist_scrip_gridnum.nc #设置模式网格描述文件路径（模式网格描述文件的生成请参考模式网格生成部分）
   cdo -f nc copy ${pathin}/${file} ${pathou}/${file}.tmp0.nc #将GRIB格式文件转化为nc格式
-  cdo setmisstoc,0 ${pathou}/${file}.tmp0.nc ${pathou}/${file}.tmp.nc #将缺省值设为0
-  cdo -P 6 remapycon,${cdo_grid_file} ${pathou}/${file}.tmp.nc ${pathou}/${file}.${hres}.nc #将初始场数据插值到模式网格
+  cdo chname,var34,sst,var235,tsk,var31,sic ${pathou}/${file}.tmp0.nc  ${pathou}/${file}.nc #修改变量名
+  rm -rf ${pathou}/${file}.*tmp.nc ${pathou}/${file}.tmp0.nc #删除中间数据
 
 强迫数据模态设置
 ~~~~~~~~~~~~~~~~
@@ -59,62 +59,194 @@
 
 强迫数据后处理
 ~~~~~~~~~~~~~~~~
-制定好强迫模态后，用户需根据各模态的需求下载对应的数据,运行step2_rename_sstsic.sh将插值好的初值文件变量名改为模式适用变量，以下给出不同模态下载对应step2_rename_sstsic.sh参考设置：
-
-1.AMIP模态（建议下载mothly数据）：
+制定好强迫模态后，运行step2_possion.sh对初值文件变量进行泊松插值来处理缺测值，以下step2_possion.sh参考设置：
 ::
-  cdo chname,var34,sst,var31,sic ${pathin}/${file} ${pathou}/realNoMissCDOYconsstsic.monthly${fdate}.${res}.nc #将var34改名为sst，将var31改名为sic
-  cdo cat ${pathou}/realNoMissCDOYconsstsic.monthly196912.${res}.nc ${pathou}/realNoMissCDOYconsstsic.monthly197???.${res}.nc ${pathou}/realNoMissCDOYconsstsic.monthly19801.${res}.nc realNoMissERA5SstSic.1970.GRIST.${res}.nc 
+  filein=${pathin}/${file} #输入文件名那个
+  fileou=${pathou}/realNoMissCDOYconsstsic.6hr${date}.${res}.nc #输出文件名
+  echo 'Step 1: possion inte to :  ' ${fileou}
+  cat > poisson.ncl << EOF #泊松插值脚本
+  begin
+  f1=addfile("${filein}","r") #读文件
+  sst    = f1->sst #读取变量
 
-2.CYCLE模态（建议下载monthly数据）：
-::
-  cdo chname,var34,sst,var31,sic ${pathin}/${file} ${pathou}/realNoMissCDOYconsstsic.monthly${fdate}.${res}.nc #将var34改名为sst，将var31改名为sic
-  cdo ensmean ${pathou}/realNoMissCDOYconsstsic.monthly????01.${res}.nc   ${pathou}/realNoMissCDOYconsstsic.clim01.${res}.nc #对所有年份1月数据做平均
-  ... ...
-  cdo ensmean ${pathou}/realNoMissCDOYconsstsic.monthly????12.${res}.nc   ${pathou}/realNoMissCDOYconsstsic.clim12.${res}.nc #同上但为12月
-  cdo cat ${pathou}/realNoMissCDOYconsstsic.clim*.nc ${pathou}/realNoMissERA5SstSicCYCLE.GRIST.${res}.nc
+  guess     = 1                ; use zonal means
+  is_cyclic = True             ; cyclic [global]
+  nscan     = 1500             ; usually much less than this
+  eps       = 0.001            ; variable dependent
+  relc      = 0.6              ; relaxation coefficient
+  opt       = 0                ; not used
+  poisson_grid_fill( sst, is_cyclic, guess, nscan, eps, relc, opt) #泊松插值
 
-3.DAILY模态（建议下载DAYLY数据）：
+  b1=addfile("${fileou}", "c") #写文件
+  b1->sst=sst
+  end
+
+  EOF
+
+  ncl poisson.ncl #运行脚本
+  rm  poisson.ncl #删除脚本
+泊松插值完成后，需运行step3_post_sstsic.sh将初值文件变量插值到模式网格，以下step3_post_sstsic.sh参考设置：
 ::
-  cdo chname,var34,sst,var31,sic ${pathin}/${file} ${pathou}/realNoMissERA5consstsic.daily${fdate}.${res}.nc #将var34改名为sst，将var31改名为sic
+  filein=${pathin}/${file} #输入文件名
+  fileou=${pathou}/realNoMissCDOYconsstsic.6hr${date}.${res}.nc #中间文件名
+  fileouf=${pathou}/realNoMissCDOYconsstsic.daily${date}.${res}.nc #输出文件名
+  cdo_grid_file=/fs2/home/zhangyi/public/g9b3_grids/grist_scrip_23592962.nc #模式网格文件
+  filemask=/fs2/home/zhangyi/wangym/GRIST_Data-master/static/static.g9b3.mpiscvt.nc #海陆mask
+
+  cdo -f nc4c -P 6 remapycon,${cdo_grid_file} ${filein} ${pathou}/remap.tmp.nc #将初值插值到模式网格
+  cdo selname,sic ${pathou}/remap.tmp.nc ${pathou}/remap.sic.tmp.nc #提取海冰文件
+  cdo selname,MASK ${filemask} ${pathou}/mask.tmp.nc #提取海路mask
+  cdo chname,MASK,sic ${pathou}/mask.tmp.nc ${pathou}/remap.masksic.tmp.nc #将MASK重命名为sic作为sic变量的mask
+  cdo ifnotthen ${pathou}/remap.masksic.tmp.nc ${pathou}/remap.sic.tmp.nc ${pathou}/remap.sicnew.tmp.nc #将陆地部分设为缺测
+  cdo setmisstoc,0 ${pathou}/remap.sicnew.tmp.nc ${pathou}/remap.sicnew.tmp1.nc #将缺测设为0
+  cdo selname,tsk,sst ${pathou}/remap.tmp.nc ${fileou} #提取tsk，sst
+  ncks -4 -A ${pathou}/remap.sicnew.tmp1.nc ${fileou} #拼接sst，sic，tsk
+  cdo -f nc2 timmean ${fileou} ${fileouf} #生成daily强迫场
   
 
 强迫数据制作脚本参考样例（使用G8分辨率网格）
 ----------------
 **1.step1_convert_sstsic.sh**
 ::
-  pathin='/fs2/home/zhangyi/zhouyh/data/download/mcs/sstsic'
-  pathou='../download/netcdf/20080714/sstsic'
+  pathin='/fs2/home/zhangyi/wangym/data/script/sstsic/case2'
+  pathou='../download/netcdf/19980101/sstsic'
   mkdir -p ${pathou}
-  hres="G8UR"
-  cdo_grid_file=/fs2/home/zhangyi/wangym/GRIST_Data-master/g8-uniform/grid/grist_scrip_655362.nc
+  rm -rf ${pathou}/*
+
+  hres="G9B3"
+  cdo_grid_file=/fs2/home/zhangyi/g9b3_grids/grist_scrip_23592962.nc
+ 
   for file in `ls ${pathin}` ;do
+
   if [ "${file##*.}"x = "grib"x ] ;then
+
   echo ${file}
   echo "1) convert grib to netcdf"
   cdo -f nc copy ${pathin}/${file} ${pathou}/${file}.tmp0.nc
-  # only sea ice fraction has missing, just set to 0
-  cdo setmisstoc,0                 ${pathou}/${file}.tmp0.nc ${pathou}/${file}.tmp.nc
-  echo "2) convert lat-lon to unstructured"
-  cdo -P 6 remapycon,${cdo_grid_file} ${pathou}/${file}.tmp.nc ${pathou}/${file}.${hres}.nc
+
+  echo "2) rename sst tsk sic"
+  cdo chname,var34,sst,var235,tsk,var31,sic ${pathou}/${file}.tmp0.nc  ${pathou}/${file}.nc
+
   echo "3) clean"
-  rm -rf ${pathou}/${file}.tmp.nc ${pathou}/${file}.tmp0.nc
+  rm -rf ${pathou}/${file}.*tmp.nc ${pathou}/${file}.tmp0.nc
   echo "done"
+  fi
+
+  done
+
+
+**2.step2_possion.sh（以DAILY模态为例）**
+::
+  #!/bin/bash
+  lev_type=sf
+  year=2020
+  pathin='../download/netcdf/19980101/sstsic'
+  pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-case2/sstsic'
+  res=G9B3
+
+  mkdir -p ${pathou}
+  rm -rf ${pathou}/*.nc
+
+  for file in `ls ${pathin}` ;do
+
+  if [ "${file##*.}"x = "nc"x ] ;then
+
+
+  echo ${file}
+  date=${file:8:8}
+  echo ${date}
+
+  filein=${pathin}/${file}
+  fileou=${pathou}/realNoMissCDOYconsstsic.6hr${date}.${res}.nc
+  rm -rf ${fileou}
+  echo 'Step 1: possion inte to :  ' ${fileou}
+
+  cat > poisson.ncl << EOF
+  load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
+  load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
+  load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
+  load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/shea_util.ncl"
+
+  begin
+
+  f1=addfile("${filein}","r")
+  sic    = f1->sic
+  sst    = f1->sst
+  tsk    = f1->tsk
+
+  guess     = 1                ; use zonal means
+  is_cyclic = True             ; cyclic [global]
+  nscan     = 1500             ; usually much less than this
+  eps       = 0.001            ; variable dependent
+  relc      = 0.6              ; relaxation coefficient
+  opt       = 0                ; not used
+  poisson_grid_fill( sst, is_cyclic, guess, nscan, eps, relc, opt)
+
+  b1=addfile("${fileou}", "c")
+
+  b1->sic=sic
+  b1->sst=sst
+  b1->tsk=tsk
+
+  end
+  EOF
+  ncl poisson.ncl
+  rm  poisson.ncl
+
+  fi
+  done
+**3.step3_post_sstsic.sh（以DAILY模态为例）**
+::
+  pathin=/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-case2/sstsic
+  pathou=/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-case2/sstsic/new
+
+  if [ ! -d ${pathou} ];then
+     mkdir -p ${pathou}
+  fi
+
+  rm -rf ${pathou}/*
+
+  res=G9B3
+
+  echo 'Step 3:   NC   Data from:  '  $pathin
+  echo 'Step 3:   NC   Data To  :  '  $pathou
+
+  lev_type=sf
+
+  for file in `ls ${pathin}` ;do
+
+  if [ "${file##*.}"x = "nc"x ] ;then
+
+  echo ${file}
+  datetmp=${file#*.}
+  date=${datetmp:3:8}
+  echo ${date}
+
+  filein=${pathin}/${file}
+  fileou=${pathou}/realNoMissCDOYconsstsic.6hr${date}.${res}.nc
+  fileouf=${pathou}/realNoMissCDOYconsstsic.daily${date}.${res}.nc
+  cdo_grid_file=/fs2/home/zhangyi/public/g9b3_grids/grist_scrip_23592962.nc
+  filemask=/fs2/home/zhangyi/wangym/GRIST_Data-master/static/static.g9b3.mpiscvt.nc
+  if [ -f ${filein} ]; then
+      echo 'Remaps :'${filein}
+
+      rm -rf  ${fileou}
+      cdo -f nc4c -P 6 remapycon,${cdo_grid_file} ${filein} ${pathou}/remap.tmp.nc
+      cdo selname,sic ${pathou}/remap.tmp.nc ${pathou}/remap.sic.tmp.nc
+      cdo selname,MASK ${filemask} ${pathou}/mask.tmp.nc
+      cdo chname,MASK,sic ${pathou}/mask.tmp.nc ${pathou}/remap.masksic.tmp.nc
+      cdo ifnotthen ${pathou}/remap.masksic.tmp.nc ${pathou}/remap.sic.tmp.nc ${pathou}/remap.sicnew.tmp.nc
+      cdo setmisstoc,0 ${pathou}/remap.sicnew.tmp.nc ${pathou}/remap.sicnew.tmp1.nc
+      cdo selname,tsk,sst ${pathou}/remap.tmp.nc ${fileou}
+      ncks -4 -A ${pathou}/remap.sicnew.tmp1.nc ${fileou}
+      cdo -f nc2 timmean ${fileou} ${fileouf}
+      rm -rf  ${pathou}/*tmp*
+
+  echo "Done"
+  else
+      echo 'NO file in '${filein}
+  fi
   fi
   done
 
-**2.step2_rename_sstsic.sh（以DAILY模态为例）**
-::
-  res=G8UR
-  pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G8UR/sstsic'
-  lev_type=sf
-  mkdir -p ${pathou}
-  pathin=../download/netcdf/20080714/sstsic
-  for file in `ls ${pathin}` ;do
-  echo ${file}
-  fdate=${file:8:8}
-  echo ${fdate}
-  if true ;then
-     cdo chname,var34,sst,var31,sic ${pathin}/${file} ${pathou}/realNoMissCDOYconsstsic.daily${fdate}.${res}.nc
-  fi
-  done
+

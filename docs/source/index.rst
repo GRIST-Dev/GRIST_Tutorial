@@ -21,5 +21,6 @@ GRIST模式教程
    static
    initial
    forcing
+   couple
    references
    support

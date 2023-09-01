@@ -48,10 +48,10 @@ AMIPW-physics：-O1 -fp-model precise -traceback -r8 -convert big_endian -DSCM_P
 
 二进程并行执行文件，运行完成后会生成多个nc文件，即为GRIST_SCM模式运行结果。
 
-参考样例：TWP-ICE （The Tropical WarmPool International Cloud Experiment）
+参考样例1：热带暖池云系统解析模拟 
 ----------------------------
 
-TWP-ICE于2006年1月20日至2月13日在澳大利亚北部达尔文附近(12◦ S, 131◦ E)开展，其数据产品为描述热带云系统及其环境背景和影响的综合数据集，被广泛用于研究与热带对流有关的降雨和云。
+热带暖池云系统实验（The Tropical WarmPool International Cloud Experiment，TWP-ICE）于2006年1月20日至2月13日在澳大利亚北部达尔文附近(12◦ S, 131◦ E)开展，其数据产品为描述热带云系统及其环境背景和影响的综合数据集，被广泛用于研究与热带对流有关的降雨和云。
 
 运行目录: GRIST_examples/grist_scm_TWP.tgz
 >>>>>>>>>
@@ -89,6 +89,81 @@ namelist配置参考
    :scale: 80%
    :align: center
 
+参考样例2：海洋非降水层积云解析模拟 
+----------------------------
 
+海洋层积云动力学和化学野外研究项目(Dynamics of Marine Stratocumulus Experiment, DYCOMS)于2001年7月在南加州海岸进行。
 
+namelist配置参考
+>>>>>>>>>
 
+1. grist.nml
+::
+     day_duration             = 1 #持续时间
+     model_timestep           = 1200 #时间步长
+     h1_history_freq          = 3 #控制输出文件的时间间隔
+     #若采用amipc package，则
+     Ntracer                  = 5  
+     physpkg                  = ‘AMIPC_PHYSICS’  
+     physics_coupling         = ‘P3’ 
+     #若采用amipw package，则
+     Ntracer                  = 6
+     physpkg                  = ‘AMIPW_PHYSICS’
+     physics_coupling         = ‘P2’
+
+2. grist_scm.nml
+::
+     start_ymd                = 19990710 #开始时间
+     start_tod                = 0 #开始时间
+     scm_lat                  = 31.5 #纬度
+     scm_lon                  = 238.5 #经度
+     scm_test_name            = 'dycoms' #试验名称
+     scm_relaxation           = .false. #是否打开relaxation
+
+参考样例3：亚热带云解析模拟 
+----------------------------
+云反馈模式比较项目（the Cloud Feedback Model Intercomparison Project；CFMIP）和全球大气系统研究（Global Atmospheric System Studies；GASS）发起的联合项目——CGILS（the CFMIP-GASS Intercomparison of Large Eddy Models (LESs) and single column models (SCMs)）.CGILS数据集来源于15个SCMs模式和8个LES模式的模拟结果，包含三个地点，分别为S6、S11和S12，对应的经纬度位置分别为（17◦ N, 149◦ W）、（32◦ N, 129◦ W）和（35◦ N, 125◦ W），对应的云类型分别为浅积云、层积云和层云。
+
+namelist配置参考
+>>>>>>>>>
+
+1. grist.nml
+::
+     day_duration             = 150 #持续时间
+     model_timestep           = 1200 #时间步长
+     h1_history_freq          = 72 #控制输出文件的时间间隔
+     #若采用amipc package，则
+     Ntracer                  = 5  
+     physpkg                  = ‘AMIPC_PHYSICS’  
+     physics_coupling         = ‘P3’ 
+     #若采用amipw package，则
+     Ntracer                  = 6
+     physpkg                  = ‘AMIPW_PHYSICS’
+     physics_coupling         = ‘P2’
+
+2. grist_scm.nml（CGILS-S6试验）
+::
+     start_ymd                = 20030715 #开始时间
+     start_tod                = 0 #开始时间
+     scm_lat                  = 17 #纬度
+     scm_lon                  = 211 #经度
+     scm_test_name            = 'cgilsS6' #试验名称
+     scm_relaxation           = .false. #是否打开relaxation
+
+3. grist_scm.nml（CGILS-S11试验）
+::
+     start_ymd                = 20030715 #开始时间
+     start_tod                = 0 #开始时间
+     scm_lat                  = 32 #纬度
+     scm_lon                  = 231 #经度
+     scm_test_name            = 'cgilsS11' #试验名称
+     scm_relaxation           = .false. #是否打开relaxation
+
+4. grist_scm.nml（CGILS-S12试验）
+::
+     start_ymd                = 20030715 #开始时间
+     start_tod                = 0 #开始时间
+     scm_lat                  = 35 #纬度
+     scm_lon                  = 235 #经度
+     scm_test_name            = 'cgilsS12' #试验名称
+     scm_relaxation           = .false. #是否打开relaxation

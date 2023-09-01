@@ -21,6 +21,7 @@ GRIST模式教程
    static
    initial
    forcing
+   SCM
    couple
    references
    support

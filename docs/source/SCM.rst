@@ -53,9 +53,6 @@ AMIPW-physics：-O1 -fp-model precise -traceback -r8 -convert big_endian -DSCM_P
 
 热带暖池云系统实验（The Tropical WarmPool International Cloud Experiment，TWP-ICE）于2006年1月20日至2月13日在澳大利亚北部达尔文附近(12◦ S, 131◦ E)开展，其数据产品为描述热带云系统及其环境背景和影响的综合数据集，被广泛用于研究与热带对流有关的降雨和云。
 
-运行目录: GRIST_examples/grist_scm_TWP.tgz
->>>>>>>>>
-
 namelist配置参考
 >>>>>>>>>
 
@@ -122,7 +119,7 @@ namelist配置参考
 
 参考样例3：亚热带云解析模拟 
 ----------------------------
-云反馈模式比较项目（the Cloud Feedback Model Intercomparison Project；CFMIP）和全球大气系统研究（Global Atmospheric System Studies；GASS）发起的联合项目——CGILS（the CFMIP-GASS Intercomparison of Large Eddy Models (LESs) and single column models (SCMs)）.CGILS数据集来源于15个SCMs模式和8个LES模式的模拟结果，包含三个地点，分别为S6、S11和S12，对应的经纬度位置分别为（17◦ N, 149◦ W）、（32◦ N, 129◦ W）和（35◦ N, 125◦ W），对应的云类型分别为浅积云、层积云和层云。
+云反馈模式比较项目（the Cloud Feedback Model Intercomparison Project；CFMIP）和全球大气系统研究（Global Atmospheric System Studies；GASS）发起的联合项目——CGILS（the CFMIP-GASS Intercomparison of Large Eddy Models (LESs) and single column models (SCMs)）。CGILS数据集来源于15个SCMs模式和8个LES模式的模拟结果，包含三个地点，分别为S6、S11和S12，对应的经纬度位置分别为（17◦ N, 149◦ W）、（32◦ N, 129◦ W）和（35◦ N, 125◦ W），对应的云类型分别为浅积云、层积云和层云，简称CGILS-S6、CGILS-S11、CGILS-S12。
 
 namelist配置参考
 >>>>>>>>>

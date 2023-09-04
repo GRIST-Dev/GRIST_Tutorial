@@ -181,14 +181,14 @@ GRIST_AMIPC的初始场、强迫数据以及模态等参数与GRIST_AMIPW一致�
 ----------------
 
 .. image:: images/fuzhen-amip-1.jpg    
-   :scale: 80%
+   :scale: 100%
    :align: center
 图1. （a）观测（ERA5）、（b）AMIIPC与（c）AMIPW中的年平均150hPa速度势的气候态分布特征。 
 
 
 
 .. image:: images/fuzhen-amip-2.jpg    
-   :scale: 80%
+   :scale: 100%
    :align: center
 图2. （a）GPCP、（b）GPM、（c）AMIIPC与（d）AMIPW中的年平均降水的气候态分布特征。
 

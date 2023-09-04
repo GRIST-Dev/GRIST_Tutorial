@@ -2,7 +2,7 @@
 ================
 【1】模式介绍
 ----------------
-全球-区域一体化预测系统（Global-to-Regional Integrated forecast SysTem；GRIST）是近年来国内模式开发团队独立设计、自主研发的新一代非结构化网格天气-气候一体化模式系统。传统意义上，数值天气预报（numerical weather prediction；NWP）在时间上只需积分数天至数十天，而气候模拟往往需要积分数年乃至数十年以上；除此之外，气候模拟在分辨率、物理-动力耦合等过程上也都有别于NWP。不过在GRIST系统中，天气模式与气候模式共享统一的模式框架和动力内核，可以最大限度地使用同一个模式配置来满足大多数天气、气候预测业务的需求。
+全球-区域一体化预测系统（Global-to-Regional Integrated forecast SysTem；GRIST）是近年来国内模式开发团队独立设计、自主研发的新一代非结构化网格天气-气候一体化模式系统。传统意义上，数值天气预报（numerical weather prediction；NWP）在时间上只需积分数天至数十天，而气候模拟往往需要积分数年乃至数十年以上；除此之外，气候模拟在分辨率、物理-动力耦合等过程上也都有别于NWP。而就GRIST系统而言，天气模式与气候模式共享统一的模式框架和动力内核，可以最大限度地使用同一个模式配置来满足大多数天气、气候预测业务的需求。
 
 目前，GRIST包含2套物理参数化方案包，其分别是中至云尺度天气物理包（PhysW；可用于天气-气候预测）与传统气候物理包（PhysC；可用于长期气候预测与气候变化）。本模块将基于这两套物理包，分别介绍如何运行具有真实下垫面的完整大气AMIP（Atmospheric Model Intercomparison Project）类气候试验（GRIST_AMIPW与GRIST_AMIPC），同时给出模式编译和运行的相关事项。供GRIST气候模式的初级使用者参考。
 
@@ -13,12 +13,11 @@
 ::
 
      本文档中的大部分示例代码会在这样的灰色方框中列出。
-     示例代码中使用相对于根目录的文件路径引用源代码树中的文件，
-     例如使用${GRIST_HOME}来代表GRIST的主目录。
+     示例代码中使用相对于根目录的文件路径引用源代码树中的文件，例如使用${GRIST_HOME}来代表GRIST的主目录。
 
 【2】编译和运行GRIST_AMIPW模式
 ----------------------------------
-**1.	编译GRIST_lib库**
+**2.1 编译GRIST_lib库**
 
 首先进入grist_lib库的编译目录：
 
@@ -34,7 +33,7 @@
 
 等待编译完成。
 
-**2.	编译GRIST_AMIPW主程序**
+**2.2 编译GRIST_AMIPW主程序**
 
 用户需根据计算机运行环境在编译目录中修改Makefile文件中NETCDF、PNETCDF、LAPACK和METIS _ LIB路径，修改后执行make.sh命令完成编译。默认编译选项为：mpiifort -O1 -DRRTMG_V381 -DSPIO -DUSE_HALO -DUSE_LEAP_YEAR -convert big_endian -r8 -DAMIPW_PHYSICS -DAMIPW_CLIMATE -DUSE_NOAHMP -DCDATE
 
@@ -47,7 +46,7 @@
      $ sh make.sh
      # 如果编译成功，执行目录${EXEDIR}中会出现可执行文件ParGRIST-amipw.exe
 
-**3.	运行GRIST_AMIPW**
+**2.3 运行GRIST_AMIPW**
 
 以上步骤完成后，即可运行GRIST_AMIPW。需要指出，所有前处理文件都可以生成后重复使用，如服务器中已存在所需前处理文件，则可以直接进入模式运行阶段。
 
@@ -116,11 +115,11 @@ grist.nml的部分设置参考：
 
 【3】编译和运行GRIST_AMIPC模式
 --------------------------------
-**1.	编译GRIST_lib库**
+**3.1 编译GRIST_lib库**
 
 如果在运行GRIST_AMIPW时已经编译好GRIST_lib库，则无需重复编译。
 
-**2.	编译GRIST_AMIPW主程序**
+**3.2 编译GRIST_AMIPW主程序**
 
 步骤与编译GRIST_AMIPW主程序相同，只不过GRIST_AMIPC的默认编译选项为：mpiifort -O1 -DSPIO -DUSE_HALO2 -DCMAPI -DCDATE -DAMIPC_PHYSICS -DUSE_NOAHMP -DOCNABD -DCAM3OCNABD
 
@@ -133,7 +132,7 @@ grist.nml的部分设置参考：
      $ sh make.sh
      # 如果编译成功，执行目录${EXEDIR}中会出现可执行文件ParGRIST-amp-cam5-real.exe。
 
-**3.	运行GRIST_AMIPW**
+**3.3 运行GRIST_AMIPW**
 
 以上步骤完成后，即可运行GRIST_AMIPC。需要指出，所有前处理文件都可以生成后重复使用，如服务器中已存在所需前处理文件，则可以直接进入模式运行阶段。
 
@@ -146,7 +145,7 @@ grist.nml的部分设置参考：
      $ sh run_amipc.sh
 
 运行完成后会生成多个nc文件，即为GRIST_AMIPC模式运行结果。
-GRIST_AMIPC与GRIST_AMIPW的grist.nml之间只存在少部分差异，这里将展示GRIST_AMIPC的grist.nml部分特定设置：
+GRIST_AMIPC与GRIST_AMIPW的grist.nml之间只存在少部分差异，这里只展示GRIST_AMIPC的部分特定设置：
 
 ::
 
@@ -181,13 +180,14 @@ GRIST_AMIPC的初始场、强迫数据以及模态等参数与GRIST_AMIPW一致�
 【4】结果示意
 ----------------
 
-.. image:: images\fuzhen-amip-1.jpg    
+.. image:: images/fuzhen-amip-1.jpg    
    :scale: 80%
    :align: center
 图1. （a）观测（ERA5）、（b）AMIIPC与（c）AMIPW中的年平均150hPa速度势的气候态分布特征。 
 
 
-.. image:: images\fuzhen-amip-2.jpg    
+
+.. image:: images/fuzhen-amip-2.jpg    
    :scale: 80%
    :align: center
 图2. （a）GPCP、（b）GPM、（c）AMIIPC与（d）AMIPW中的年平均降水的气候态分布特征。

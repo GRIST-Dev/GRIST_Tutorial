@@ -22,6 +22,7 @@ GRIST模式教程
    initial
    forcing
    SCM
+   AMIP
    couple
    references
    support

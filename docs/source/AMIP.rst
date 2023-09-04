@@ -187,7 +187,6 @@ GRIST_AMIPC的初始场、强迫数据以及模态等参数与GRIST_AMIPW一致�
 
 
 .. image:: images/fuzhen-amip-2.jpg    
-   :scale: 100%
    :align: center
 图2. （a）GPCP、（b）GPM、（c）AMIIPC与（d）AMIPW中的年平均降水的气候态分布特征。
 

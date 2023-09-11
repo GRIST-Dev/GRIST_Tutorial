@@ -23,6 +23,7 @@ GRIST模式教程
    forcing
    SCM
    AMIP
+   g8g9ur
    couple
    references
    support

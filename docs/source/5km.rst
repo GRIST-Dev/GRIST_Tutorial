@@ -1,4 +1,4 @@
-中期天气预报
+K-scale应用
 ================   
 
 代码版本：GRIST-A23.6.26 
@@ -61,47 +61,60 @@ grist.nml的部分设置参考：
 
      #设置积分时长、步长等各类参数
      &ctl_para
-     day_duration          = 10
-     model_timestep        = 180
-     h1_history_freq       = 60
-     working_mode          = 'amipw'
-     start_ymd             = 20000526
-     comm_group_size       = 10
-     grid_info             = "G9UR"
+     day_duration          = 10              #积分总时间
+     model_timestep        = 60              #积分步长
+     h1_history_freq       = 60              #历史文件输出间隔
+     working_mode          = 'amipw'         #工作模式
+     start_ymd             = 20000526        #起始日期
+     grid_info             = "G9B3UR"        #网格信息
      /
      &dycore_para
-     nh_dynamics            = .false.
-     smooth_topo            = .false.
-     nsmooth_topo           = 8
-     smooth_type            = 'cellAvg'
-     topo_type              = 'static'
+     nh_dynamics            = .true.         #静力/非静力开关，k-scale一般采用静力动力内核
+     smooth_topo            =.true.          #地形平滑开关，k-scale一般开启改选项
+     nsmooth_topo           = 12             #平滑系数
+     smooth_type            = 'cellAvg'      #平滑选项
+     topo_type              = 'static'       #平滑类型
+     smg_coef               = 0.005          
+     ko4_coef               = 1e10
+     ref_leng               = 3500
      /
      &tracer_para
-     ntracer               = 6
+     ntracer               = 6                #示踪物种类
+     tracer_timestep       = 30               #示踪物时间步长
+     tracer_hori_timestep  = 30               #水平时间步长
+     tracer_vert_timestep  = 30               #垂直时间步长
      /
      &physics_para
-     physpkg               = 'AMIPW_PHYSICS'
-     ptend_wind_rk_on      = .true.
+     physpkg               = 'AMIPW_PHYSICS'  #物理包
+     ptend_wind_rk_on      = .true.           
      ptend_heat_rk_on      = .true.
-     use_som                = .true.
+     use_som               = .false.          #平板海洋模式开关
+     ptendSubDiabPhys      = .true.           
 
 ::
 
      #设置初始场、强迫数据以及模态等参数
      &data_para
-     outdir                 = '/Path/to/outdir'
-     gridFilePath           = '/Path/to/grid/file'
-     gridFileNameHead       = 'grist.grid_file.g9.ccvt'
-     staticFilePath         = '/Path/to/static_uniform_g9.nc'
-     initialAtmFilePath     = '/Path/to/initialAtmFile'
-     initialLndFilePath     = '/Path/to/initialLndFile'
-     sstFilePath            = '/Path/to/sstFile'
-     initialDataSorc        = 'ERAIP'
-     numMonSST              = 1
-     sstFile_year_beg       = 2021
-     real_sst_style         = 'DAILY'
-     sstFileNameHead        = 'realNoMissGFSSstSic20210630.'
-     sstFileNameTail        = '.GRIST.2621442.nc'
+     outdir                 = '/Path/to/outdir'                    #输出目录
+     gridFilePath           = '/Path/to/grid/file'                 #网格文件路径
+     gridFileNameHead       = 'grist.grid_file.g9.ccvt'            #网格文件前缀
+     staticFilePath         = '/Path/to/static_uniform_g9.nc'      #静态数据文件路径
+     large_atm_file_on      = .true.                               #大初始文件开关
+     initialAtmUFilePath    = '/Path/to/AtmUFile'                  #U文件路径
+     initialAtmVFilePath    = '/Path/to/AtmVFile'                  #V文件路径
+     initialAtmTFilePath    = '/Path/to/AtmTFile'                  #T文件路径
+     initialAtmQFilePath    = '/Path/to/AtmQFile'                  #Q文件路径
+     initialAtmFilePath     = '/Path/to/Atm_singlelevel_File'      #大气单层变量文件路径
+     initialLndFilePath     = '/Path/to/LndFile'                   #陆面数据路径
+     sstFilePath            = '/Path/to/sstFile'                   #海洋强迫文件路径
+     initialDataSorc        = 'ERAIP'                              #初始文件类型
+     numMonSST              = 1                                    #海温长度
+     sstFile_year_beg       = 2021                                 #初始海温年份
+     real_sst_style         = 'DAILY'                              #海温文件类型
+     sstFileNameHead        = 'realNoMissGFSSstSic20210630.'       #海温文件前缀
+     sstFileNameTail        = '.GRIST.2621442.nc'                  #海温文件后缀
+     pardir                 = 'Path/to/partitionfile'              #分区文件
+     read_partition         = .true.                               #分区文件开关
 
 
 设置完grist.nml之后，再根据具体需求设置grist_amipw_phys.nml，这里以GRIST_AMIPW使用的默认物理包配置为例：
@@ -118,25 +131,23 @@ grist.nml的部分设置参考：
      wrfphys_bl_scheme     = 'YSUV381'       #Boundary layer
      wrfphys_sf_scheme     = 'SFCLAYV381'    #Surface layer
      wrfphys_lm_scheme     = 'noahmp'        #Land model
+     unuse_cu               = .true.         #对流包开关，在k-scale中可以认为对流是可解析的，因此可以关闭对流包
+     step_cu                = 2              #对流时间步长
+     step_ra                = 15             #辐射时间不长
+     use_gwdo               = .false.        #gwdo开关
 
 
 结果示意
 ----------------
 
-.. image:: images/amipw.png   
+.. image:: images/k-scale.jpg   
    :align: center
 图1. 2021年6月24日-7月4日平均降水。 
 
 
-
-.. image:: images/hdc-ndc.png    
-   :align: center
-图2. （a）HDC中期预报平均降水，（b）同（a）但为NDC结果。
-
 参考文献
 ----------------
-陈苏阳，张祎，周逸辉，李晓涵，王一鸣，陈昊明. 2023. GRIST模式夏季气候回报试验中东亚降水季节内特征的评估. 气象学报，81（2）：269-285 doi: 10.11676/qxxb2023.20220120.
-
+Zhang, Y., X. Li, Z. Liu, X. Rong, J. Li, Y. Zhou, and S. Chen, (2022), Resolution Sensitivity of the GRIST Nonhydrostatic Model From 120 to 5 km (3.75 km) During the DYAMOND Winter. Earth and Space Science, 9(9), e2022EA002401.doi:https://doi.org/10.1029/2022EA002401.
 
 备注
 ----------------

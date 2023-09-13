@@ -4,7 +4,7 @@ K-scale应用
 代码版本：GRIST-A23.6.26 
 ----------------------------------
 
-本模块所使用的数据均可从以下链接获取：https://pan.baidu.com/s/1bynV2NiwoiZpefzjQAUEsg?pwd=0rw8 
+本模块所使用的数据均可从以下链接获取：https://pan.baidu.com/s/14KORa2Y-udMgaHSaXzb6EA?pwd=2l3n
 
 编译和运行
 ----------------------------------

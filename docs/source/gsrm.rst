@@ -123,7 +123,7 @@ grist.nml的部分设置参考：
 
      &wrfphys_para
      wrfphys_cu_scheme     = 'NTDKV381'      #Convection
-     wrfphys_cf_scheme     = 'CAM3'          #Cloud fraction
+     wrfphys_cf_scheme     = 'RANDALL'          #Cloud fraction
      wrfphys_ra_scheme     = 'RRTMGV381'     #Radiation
      wrfphys_rasw_scheme   = 'RRTMGV381'
      wrfphys_ralw_scheme   = 'RRTMGV381'
@@ -142,7 +142,7 @@ grist.nml的部分设置参考：
 
 .. image:: images/k-scale.jpg   
    :align: center
-图1. 2021年6月24日-7月4日平均降水。 
+图1. （a）5km和（b）3.75km模式模拟的12天（从2020年1月20日0000 UTC到2020年2月1日0000 UTC）平均降水（单位：mm/day）
 
 
 参考文献

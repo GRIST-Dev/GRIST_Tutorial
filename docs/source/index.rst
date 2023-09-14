@@ -15,7 +15,6 @@ GRIST模式教程
 
    install
    output
-   appendix
    grid
    static
    initial
@@ -25,5 +24,6 @@ GRIST模式教程
    gsrm 
    SCM
    couple
+   appendix
    references
    support

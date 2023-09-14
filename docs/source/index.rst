@@ -15,7 +15,6 @@ GRIST模式教程
 
    install
    output
-   application
    appendix
    grid
    static

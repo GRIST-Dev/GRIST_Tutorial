@@ -21,10 +21,10 @@ GRIST模式教程
    static
    initial
    forcing
-   SCM
    AMIP
-   g8g9ur
-   5km
+   nwp 
+   gsrm 
+   SCM
    couple
    references
    support

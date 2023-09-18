@@ -97,20 +97,20 @@
 
 .. code-block:: bash
 
-  ncks -v lon_nv,lat_nv,ps,hps ${inpth}/1d/${fhead}.1d.h1.nc tmp.nc #提取经纬度和表层气压变量
-  ncks -v uPC,vPC,temperature  ${inpth}/2d/${fhead}.2d.h1.nc tmp2.nc #提取U，V和温度等2维变量
-  ncks -d ntracer,0  ${inpth}/3d/${fhead}.3d.h1.nc tmp3a.nc #提取Q变量
-  ncpdq -a ntracer,location_nv,nlev tmp3a.nc tmp3.nc #将Q变量的维度调整为（ntracer,location_nv,nlev）
-  ncrename -d ntracer,time tmp3.nc tmp3b.nc #将ntracer变量重命名为time（便于后面操作）
-  ncks -A tmp2.nc tmp.nc #拼接1d和2d变量
-  ncks -A tmp3b.nc tmp.nc #拼接3d变量
-  cdo remapdis,r1440x720 tmp.nc GRIST.lamData.test.nc #水平插值到经纬度网格
-  ncks --fix_rec_dmn time GRIST.lamData.test.nc GRIST.lamData.test1.nc #将time为设为unlimited
-  cdo remapdis,/THL8/home/zhangyi/zhangyi/grid_generator/run/uniform-g9/lam_grid/grist_scrip_556704.nc GRIST.lamData.test1.nc GRIST.lamData.test2.nc #水平插值到有限区域网格
-  ncpdq -a ncells,nlev,time GRIST.lamData.test2.nc GRIST.lamData.test3.nc #将3d变量的维度调整为（ncells,nlev,time）
-  ncrename -d time,ntracer GRIST.lamData.test3.nc GRIST.lamData.test4.nc #将time维度重新设置为ntracer
-  ncrename -v time,ntracer GRIST.lamData.test4.nc GRIST.lamData.test5.nc #将time变量重命名为ntracer
-操作完成之后，运行rename_lamdata.sh对有限区域模式变量进行重命名，详情请参考下方的示例脚本
+  ncks -v ps,hps              ${inpth}/${file1d_in} 1d.nc #提取经纬度和表层气压变量
+  ncks -v uPC,vPC,temperature ${inpth}/${file2d_in} 2d.nc #提取U，V和温度等2维变量
+  ncks -v tracerMxrt          ${inpth}/${file3d_in} 3d.nc #提取Q变量
+  ncrename -d location_nv,ncells 1d.nc #将location_nv重命名为ncell
+  ncrename -d location_nv,ncells 2d.nc #将location_nv重命名为ncell
+  ncrename -d location_nv,ncells 3d.nc #将location_nv重命名为ncell
+
+  ncks -A 3d.nc 2d.nc #拼接3d和2d变量
+  ncks -A 2d.nc 1d.nc  #拼接到1d变量
+  ncatted -O -a coordinates,,m,c,"lon lat" 1d.nc #为1d变量添加经纬度坐标
+  ncks -A latlon.nc 1d.nc #将经纬度信息写入1d文件
+  ncpdq -a ntracer,ncells,nlev 1d.nc 1dnew.nc #将1d文件按照 ntracer,ncells,nlev维度的顺序重组
+  ncks --mk_rec_dmn ntracer 1dnew.nc 1dnew1.nc #将ntracer设为unlimited
+  cdo -P 24 remapdis,grist.lam_scrip_2232156.nc 1dnew1.nc grid.nc #插值
 
 初值制作脚本参考样例（使用G8分辨率网格）
 ----------------

@@ -71,8 +71,10 @@ GRISTMOM/Tools/esmf-8.3.0
 ::
     cd GRISTMOM/Tools/esmf-8.3.0
     ./compile.bash
+
 **4.	环境变量配置**
-    修改 GRISTMOM/Make/coupler-intel-mpich.sh, 具体修改内容见章节#编译
+
+修改 GRISTMOM/Make/coupler-intel-mpich.sh, 具体修改内容见章节#编译
 
 编译
 ---------------------------------
@@ -185,7 +187,7 @@ GRISTMOM/Make/Makefile 文件的使用命令：
 
 **2.	修改并行计算节点数**
 
-    对于MOM耦合来说，需要修改MOMSIS_layout，SIS_layout，cplcfg.rc 中对应的节点数，以和run.sh中使用的一致。
+对于MOM耦合来说，需要修改MOMSIS_layout，SIS_layout，cplcfg.rc 中对应的节点数，以和run.sh中使用的一致。
 
 **3.	运行命令**
 ::
@@ -227,14 +229,15 @@ GRISTMOM/TOOLS/gendata-GRIST
     └── G9
 
 - 所需初始场、强迫场数据 
-包括：
-::
+
+.. code-block:: ?
+
     ├── geniniFromERA5      # 利用ERA5数据制作初始场数据
     ├── geniniFromGFS       # 利用ERA5数据制作初始场数据
     └── gensstFromERA5      # 利用ERA5数据制作强迫场数据
 - 制作方法
-运行：
-::
+
+.. code-block:: ?
     ./ GRISTMOM/TOOLS/gendata-GRIST/geniniFromERA5/scripts/pre_process.sh  
     ./ GRISTMOM/TOOLS/gendata-GRIST/geniniFromGFS/scripts/pre_process.sh 
     ./ GRISTMOM/TOOLS/gendata-GRIST/gensstFromERA5/scripts/pre_process.sh 

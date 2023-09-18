@@ -242,52 +242,52 @@
 
 .. code-block:: bash
 
-inpth=../data
-oupth=GRIST_lamData
-filehead=GRIST.ATM.CPTP-50_3.5km.amipw
-mkdir -p ${oupth}
+  inpth=../data
+  oupth=GRIST_lamData
+  filehead=GRIST.ATM.CPTP-50_3.5km.amipw
+  mkdir -p ${oupth}
 
-for year in 2008 ;do
-for mon  in 07 ;do
-for day  in 16 17 18 19 ;do
-for sec  in 00000 03600 07200 10800 14400 18000 21600 25200 28800 32400 36000 39600 \
+  for year in 2008 ;do
+  for mon  in 07 ;do
+  for day  in 16 17 18 19 ;do
+  for sec  in 00000 03600 07200 10800 14400 18000 21600 25200 28800 32400 36000 39600 \
             43200 46800 50400 54000 57600 61200 64800 68400 72000 75600 79200 82800 ;do
 
-file1d_in=${filehead}.${year}-${mon}-${day}-${sec}.1d.h1.nc
-file2d_in=${filehead}.${year}-${mon}-${day}-${sec}.2d.h1.nc
-file3d_in=${filehead}.${year}-${mon}-${day}-${sec}.3d.h1.nc
+  file1d_in=${filehead}.${year}-${mon}-${day}-${sec}.1d.h1.nc
+  file2d_in=${filehead}.${year}-${mon}-${day}-${sec}.2d.h1.nc
+  file3d_in=${filehead}.${year}-${mon}-${day}-${sec}.3d.h1.nc
 
-#select
-ncks -v ps,hps              ${inpth}/${file1d_in} 1d.nc 
-ncks -v uPC,vPC,temperature ${inpth}/${file2d_in} 2d.nc 
-ncks -v tracerMxrt          ${inpth}/${file3d_in} 3d.nc 
+  #select
+  ncks -v ps,hps              ${inpth}/${file1d_in} 1d.nc 
+  ncks -v uPC,vPC,temperature ${inpth}/${file2d_in} 2d.nc 
+  ncks -v tracerMxrt          ${inpth}/${file3d_in} 3d.nc 
 
-ncrename -d location_nv,ncells 1d.nc
-ncrename -d location_nv,ncells 2d.nc
-ncrename -d location_nv,ncells 3d.nc
+  ncrename -d location_nv,ncells 1d.nc
+  ncrename -d location_nv,ncells 2d.nc
+  ncrename -d location_nv,ncells 3d.nc
 
-ncks -A 3d.nc 2d.nc
-ncks -A 2d.nc 1d.nc
-ncatted -O -a coordinates,,m,c,"lon lat" 1d.nc
-ncks -A latlon.nc 1d.nc
+  ncks -A 3d.nc 2d.nc
+  ncks -A 2d.nc 1d.nc
+  ncatted -O -a coordinates,,m,c,"lon lat" 1d.nc
+  ncks -A latlon.nc 1d.nc
 
-#manipulate
-ncpdq -a ntracer,ncells,nlev 1d.nc 1dnew.nc 
-ncks --mk_rec_dmn ntracer 1dnew.nc 1dnew1.nc
-cdo -P 24 remapdis,grist.lam_scrip_2232156.nc 1dnew1.nc grid.nc
+  #manipulate
+  ncpdq -a ntracer,ncells,nlev 1d.nc 1dnew.nc 
+  ncks --mk_rec_dmn ntracer 1dnew.nc 1dnew1.nc
+  cdo -P 24 remapdis,grist.lam_scrip_2232156.nc 1dnew1.nc grid.nc
 
-ncks --fix_rec_dmn time grid.nc grid1.nc
-ncrename -d time,ntracer grid1.nc
-ncpdq -a ncells,nlev,ntracer grid1.nc ${oupth}/GRIST.lamData.${year}${mon}${day}${sec}.nc 
+  ncks --fix_rec_dmn time grid.nc grid1.nc
+  ncrename -d time,ntracer grid1.nc
+  ncpdq -a ncells,nlev,ntracer grid1.nc ${oupth}/GRIST.lamData.${year}${mon}${day}${sec}.nc 
 
-#rename
-ncrename -v hps,HPS -v ps,PS -v uPC,U -v vPC,V -v temperature,T -v tracerMxrt,Q ${oupth}/GRIST.lamData.${year}${mon}${day}${sec}.nc
+  #rename
+  ncrename -v hps,HPS -v ps,PS -v uPC,U -v vPC,V -v temperature,T -v tracerMxrt,Q ${oupth}/GRIST.lamData.${year}${mon}${day}${sec}.nc
 
-rm -rf 1d.nc 2d.nc 3d.nc 1dnew.nc 1dnew1.nc grid.nc grid1.nc
+  rm -rf 1d.nc 2d.nc 3d.nc 1dnew.nc 1dnew1.nc grid.nc grid1.nc
 
-done
-done
-done
-done
+  done
+  done
+  done
+  done
 
-echo "sucessfully done"
+  echo "sucessfully done"

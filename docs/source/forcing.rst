@@ -15,11 +15,13 @@
 ~~~~~~~~~~~~~~~~
 此步骤需先下载ERA5、GFS或者其它资料集中的海温和海冰数据作为原始强迫数据，然后将其转化为nc格式。
 下载对应数据后，运行step1_convert_sstsic.sh对数据格式进行转换，以下为step1_convert_sstsic.sh设置参考（以ERA5数据为例）：
-::
-  pathin='/fs2/home/zhangyi/zhouyh/data/download/mcs/sstsic' #设置原始初值数据读取路径
-  pathou='../download/netcdf/20080714/sstsic' #设置初值数据生成路径
+
+.. code-block:: bash
+
+  pathin=${Path_for_inputfile} #设置原始初值数据读取路径
+  pathou=${Path_for_outputfile} #设置初值数据生成路径
   hres="G8UR" #网格名
-  cdo_grid_file=/path/to/grist_scrip_gridnum.nc #设置模式网格描述文件路径（模式网格描述文件的生成请参考模式网格生成部分）
+  cdo_grid_file=${Path_for_gridfile} #设置模式网格描述文件路径（模式网格描述文件的生成请参考模式网格生成部分）
   cdo -f nc copy ${pathin}/${file} ${pathou}/${file}.tmp0.nc #将GRIB格式文件转化为nc格式
   cdo chname,var34,sst,var235,tsk,var31,sic ${pathou}/${file}.tmp0.nc  ${pathou}/${file}.nc #修改变量名
   rm -rf ${pathou}/${file}.*tmp.nc ${pathou}/${file}.tmp0.nc #删除中间数据
@@ -60,7 +62,9 @@
 强迫数据后处理
 ~~~~~~~~~~~~~~~~
 制定好强迫模态后，运行step2_possion.sh对初值文件变量进行泊松插值来处理缺测值，以下step2_possion.sh参考设置：
-::
+
+.. code-block:: bash
+
   filein=${pathin}/${file} #输入文件名那个
   fileou=${pathou}/realNoMissCDOYconsstsic.6hr${date}.${res}.nc #输出文件名
   echo 'Step 1: possion inte to :  ' ${fileou}
@@ -86,7 +90,9 @@
   ncl poisson.ncl #运行脚本
   rm  poisson.ncl #删除脚本
 泊松插值完成后，需运行step3_post_sstsic.sh将初值文件变量插值到模式网格，以下step3_post_sstsic.sh参考设置：
-::
+
+.. code-block:: bash
+
   filein=${pathin}/${file} #输入文件名
   fileou=${pathou}/realNoMissCDOYconsstsic.6hr${date}.${res}.nc #中间文件名
   fileouf=${pathou}/realNoMissCDOYconsstsic.daily${date}.${res}.nc #输出文件名
@@ -107,14 +113,16 @@
 强迫数据制作脚本参考样例（使用G8分辨率网格）
 ----------------
 **1.step1_convert_sstsic.sh**
-::
-  pathin='/fs2/home/zhangyi/wangym/data/script/sstsic/case2'
-  pathou='../download/netcdf/19980101/sstsic'
+
+.. code-block:: bash
+
+  pathin=${Path_for_inputfile}
+  pathou=${Path_for_outputfile}
   mkdir -p ${pathou}
   rm -rf ${pathou}/*
 
   hres="G9B3"
-  cdo_grid_file=/fs2/home/zhangyi/g9b3_grids/grist_scrip_23592962.nc
+  cdo_grid_file=${Path_for_gridfile}
  
   for file in `ls ${pathin}` ;do
 
@@ -136,12 +144,14 @@
 
 
 **2.step2_possion.sh（以DAILY模态为例）**
-::
+
+.. code-block:: bash
+
   #!/bin/bash
   lev_type=sf
   year=2020
-  pathin='../download/netcdf/19980101/sstsic'
-  pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-case2/sstsic'
+  pathin=${Path_for_inputfile}
+  pathou=${Path_for_outputfile}
   res=G9B3
 
   mkdir -p ${pathou}
@@ -196,10 +206,11 @@
   fi
   done
 **3.step3_post_sstsic.sh（以DAILY模态为例）**
-::
-  pathin=/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-case2/sstsic
-  pathou=/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-case2/sstsic/new
 
+.. code-block:: bash
+
+  pathin=${Path_for_inputfile}
+  pathou=${Path_for_outputfile}
   if [ ! -d ${pathou} ];then
      mkdir -p ${pathou}
   fi
@@ -225,8 +236,8 @@
   filein=${pathin}/${file}
   fileou=${pathou}/realNoMissCDOYconsstsic.6hr${date}.${res}.nc
   fileouf=${pathou}/realNoMissCDOYconsstsic.daily${date}.${res}.nc
-  cdo_grid_file=/fs2/home/zhangyi/public/g9b3_grids/grist_scrip_23592962.nc
-  filemask=/fs2/home/zhangyi/wangym/GRIST_Data-master/static/static.g9b3.mpiscvt.nc
+  cdo_grid_file=${Path_for_gridfile}
+  filemask=${Path_for_maskfile}
   if [ -f ${filein} ]; then
       echo 'Remaps :'${filein}
 

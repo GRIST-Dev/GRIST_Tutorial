@@ -18,7 +18,9 @@
   1.	气压层数据：T（温度）、U（纬向风）、V（经向风）、比湿（Q）。
   2.	单层数据：PS（气压）、SOILH（重力位势）、SoilMoist（土壤湿度、一般有4层）、SoilTemp（土壤温度、一般有4层）、SKINTEMP（表面温度）、XICE（海冰面积）、SNOW（雪密度）、SNOWH（雪深）。
 下载对应数据后，运行step1_convert.sh对数据格式进行转换，以下为step1_convert.sh设置参考（以ERA5数据为例）：
-::
+
+.. code-block:: bash
+
   pathin='/path/to/initdata' #设置原始初值数据读取路径
   pathou='/path/to/output' #设置初值数据生成路径
   res="G8UR" #网格名
@@ -30,7 +32,9 @@
 重命名初值变量
 ~~~~~~~~~~~~~~~~
 此步骤通过运行step2_rename.sh将插值好的初值文件变量名改为模式适用的初值，以下为step2_rename.sh参考设置:
-::
+
+.. code-block:: bash
+
   res=G8UR #网格分辨率
   pathou='/path/to/output' #输出文件路径
   lev_type=pl #数据垂直层类型
@@ -51,7 +55,9 @@
 初值变量后处理
 ~~~~~~~~~~~~~~~~
 此步骤通过运行step3_post.sh脚本进一步对初值文件进行整理，使其符合GRIST模式的读取需求，以下是step3_post.sh脚本的设置参考：
-::
+
+.. code-block:: bash
+
   lvname=plev #垂直坐标变量名
   ncks -d time,0 ${pathin}/initial_${res}_${lev_type}_${year}${mon}${day}.nc  initial_${res}.dim1.nc #选取第一个时间维度的变量作为初始场（如果有多个时间维度）
   ncwa -a time initial_${res}.dim1.nc tmp.nc #去除时间维度
@@ -70,7 +76,9 @@
 大初值文件制作
 ^^^^^^^^^^^^^^^^^^^^^
 需指出，GRIST模式在读取比G9网格更细的初值文件时，由于netcdf对文件容量的限制，需单独制作气压层的各变量，并逐一读取。以下为大初值文件的制作参考：
-::
+
+.. code-block:: bash
+
   cdo selname,U ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.U.${lev_type}.${res}_${year}${mon}${day}.nc #提取U变量并单独存放
   … …
   cdo selname,Q ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.Q.${lev_type}.${res}_${year}${mon}${day}.nc #提取Q变量并单独存放
@@ -86,7 +94,9 @@
 有限区域模式的初值制作
 ----------------
 有限区域模式的初值由GRIST全球模式提供，运行remap_lam.sh脚本对全球模式处理生成有限区域模式初值。以下为remap_lam.sh的参考设置：
-::
+
+.. code-block:: bash
+
   ncks -v lon_nv,lat_nv,ps,hps ${inpth}/1d/${fhead}.1d.h1.nc tmp.nc #提取经纬度和表层气压变量
   ncks -v uPC,vPC,temperature  ${inpth}/2d/${fhead}.2d.h1.nc tmp2.nc #提取U，V和温度等2维变量
   ncks -d ntracer,0  ${inpth}/3d/${fhead}.3d.h1.nc tmp3a.nc #提取Q变量
@@ -105,7 +115,9 @@
 初值制作脚本参考样例（使用G8分辨率网格）
 ----------------
 **1.step1_convert.sh**
-::
+
+.. code-block:: bash
+
   pathin='/fs2/home/zhangyi/zhouyh/data/download/mcs/init'
   pathou='../download/netcdf/20080714/'
   mkdir -p ${pathou}
@@ -129,7 +141,9 @@
   done
 
 **2.step2_rename.sh**
-::
+
+.. code-block:: bash
+
   res=G8UR
   pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/raw'
   lev_type=pl
@@ -167,7 +181,9 @@
   done
   done
 **3.step3_post.sh**
-::
+
+.. code-block:: bash
+
   res=G8UR
   pathin='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/raw'
   pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G8UR'
@@ -223,54 +239,55 @@
   done
   done
 **4.remap_lam.sh**
-::
-  inpth=/THL8/home/zhangyi/public/GRIST/run/GRIST_NWP_2021_JJA/hdc/L30/HDC-Beg20210610-hadv33-hnrk3-vadv3-vnrk3/history/atm
-  outpth=./GRIST_lamData
-  mkdir -p ${outpth}
-  cd ${outpth}
-  for f in ${inpth}/1d/*ATM*00.1d.h1.nc ;do
-  fhead=${f:119:37}
-  echo ${fhead}
-  fyear=${fhead:21:4}
-  fmon=${fhead:26:2}
-  echo ${fyear}
-  echo ${fmon}
-  fday=${fhead:29:2}
-  fsec=${fhead:32:5}
-  echo ${fday}
-  echo ${fsec}
-  ncks -v lon_nv,lat_nv,ps,hps ${inpth}/1d/${fhead}.1d.h1.nc tmp.nc
-  cp  ${inpth}/2d/${fhead}.2d.h1.nc tmp1.nc
-  ncks -v uPC,vPC,temperature tmp1.nc tmp2.nc
-  ncks -d ntracer,0  ${inpth}/3d/${fhead}.3d.h1.nc tmp3a.nc
-  ncpdq -a ntracer,location_nv,nlev tmp3a.nc tmp3.nc
-  ncrename -d ntracer,time tmp3.nc tmp3b.nc
-  ncks -A tmp2.nc tmp.nc
-  ncks -A tmp3b.nc tmp.nc
-  cdo remapdis,r1440x720 tmp.nc GRIST.lamData.test.nc
-  ncks --fix_rec_dmn time GRIST.lamData.test.nc GRIST.lamData.test1.nc
-  cdo remapdis,/THL8/home/zhangyi/zhangyi/grid_generator/run/uniform-g9/lam_grid/grist_scrip_556704.nc GRIST.lamData.test1.nc GRIST.lamData.test2.nc
-  ncpdq -a ncells,nlev,time GRIST.lamData.test2.nc GRIST.lamData.test3.nc
-  ncrename -d time,ntracer GRIST.lamData.test3.nc GRIST.lamData.test4.nc
-  ncrename -v time,ntracer GRIST.lamData.test4.nc GRIST.lamData.test5.nc
-  ncks --fix_rec_dmn ncells GRIST.lamData.test5.nc GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
-  ncatted -O -a calendar,ntracer,d,, GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
-  ncatted -O -a axis,ntracer,d,, GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
-  ncatted -O -a standard_name,ntracer,o,c,'tracer type' GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
-  ncatted -O -a units,ntracer,o,c,' ' GRIST.lamData.${fyear}${fmon}${fday}${fsec}.nc
-  rm -rf tmp*.nc
-  rm -rf GRIST.lamData.test*.nc
-  done
-**5.rename_lamdata.sh**
-::
-  for f in ./GRIST_lamData/GRIST*.nc
-  do
-    echo ${f}
-    ncrename -v hps,HPS ${f}
-    ncrename -v uPC,U ${f}
-    ncrename -v vPC,V ${f}
-    ncrename -v temperature,T ${f}
-    ncrename -v ps,PS ${f}
-    ncrename -v tracerMxrt,Q ${f}
-  done
- 
+
+.. code-block:: bash
+
+inpth=../data
+oupth=GRIST_lamData
+filehead=GRIST.ATM.CPTP-50_3.5km.amipw
+mkdir -p ${oupth}
+
+for year in 2008 ;do
+for mon  in 07 ;do
+for day  in 16 17 18 19 ;do
+for sec  in 00000 03600 07200 10800 14400 18000 21600 25200 28800 32400 36000 39600 \
+            43200 46800 50400 54000 57600 61200 64800 68400 72000 75600 79200 82800 ;do
+
+file1d_in=${filehead}.${year}-${mon}-${day}-${sec}.1d.h1.nc
+file2d_in=${filehead}.${year}-${mon}-${day}-${sec}.2d.h1.nc
+file3d_in=${filehead}.${year}-${mon}-${day}-${sec}.3d.h1.nc
+
+#select
+ncks -v ps,hps              ${inpth}/${file1d_in} 1d.nc 
+ncks -v uPC,vPC,temperature ${inpth}/${file2d_in} 2d.nc 
+ncks -v tracerMxrt          ${inpth}/${file3d_in} 3d.nc 
+
+ncrename -d location_nv,ncells 1d.nc
+ncrename -d location_nv,ncells 2d.nc
+ncrename -d location_nv,ncells 3d.nc
+
+ncks -A 3d.nc 2d.nc
+ncks -A 2d.nc 1d.nc
+ncatted -O -a coordinates,,m,c,"lon lat" 1d.nc
+ncks -A latlon.nc 1d.nc
+
+#manipulate
+ncpdq -a ntracer,ncells,nlev 1d.nc 1dnew.nc 
+ncks --mk_rec_dmn ntracer 1dnew.nc 1dnew1.nc
+cdo -P 24 remapdis,grist.lam_scrip_2232156.nc 1dnew1.nc grid.nc
+
+ncks --fix_rec_dmn time grid.nc grid1.nc
+ncrename -d time,ntracer grid1.nc
+ncpdq -a ncells,nlev,ntracer grid1.nc ${oupth}/GRIST.lamData.${year}${mon}${day}${sec}.nc 
+
+#rename
+ncrename -v hps,HPS -v ps,PS -v uPC,U -v vPC,V -v temperature,T -v tracerMxrt,Q ${oupth}/GRIST.lamData.${year}${mon}${day}${sec}.nc
+
+rm -rf 1d.nc 2d.nc 3d.nc 1dnew.nc 1dnew1.nc grid.nc grid1.nc
+
+done
+done
+done
+done
+
+echo "sucessfully done"

@@ -41,13 +41,15 @@ ESMF(Earth System Modeling Frame) 是由NASA提出并维护的面向地球系统
     
 - 使用TOOLs中的安装包
     
-GRISTMOM/Tools/esmf-8.3.0
+${GRISTMOM_PATH}/Tools/esmf-8.3.0
 
 **2.	修改脚本**
 
 修改安装文件 compile.bash:
-:: 
-    cd  GRISTMOM/Tools/esmf-8.3.0/
+
+.. code-block:: bash
+ 
+    cd  ${GRISTMOM_PATH}/Tools/esmf-8.3.0/
     # compile.bash
     # 指定FC、CC、CXX 【环境是mpich2】
     FC=mpifort
@@ -59,7 +61,7 @@ GRISTMOM/Tools/esmf-8.3.0
     export ESMF_BOPT=O
     export ESMF_COMM=mpich  #intelmpi
     export ESMF_COMPILER=intel
-    export ESMF_INSTALL_PREFIX=GRISTMOM/esmf-8.3.0-intel2019
+    export ESMF_INSTALL_PREFIX=${GRISTMOM_PATH}/esmf-8.3.0-intel2019
     export ESMF_NETCDF=nc-config
     export ESMF_PIO=OFF #internal
     #
@@ -69,18 +71,20 @@ GRISTMOM/Tools/esmf-8.3.0
 
 **3.	运行程序**
 ::
-    cd GRISTMOM/Tools/esmf-8.3.0
+    cd ${GRISTMOM_PATH}/Tools/esmf-8.3.0
     ./compile.bash
 
 **4.	环境变量配置**
 
-修改 GRISTMOM/Make/coupler-intel-mpich.sh, 具体修改内容见章节#编译
+修改 ${GRISTMOM_PATH}/Make/coupler-intel-mpich.sh, 具体修改内容见章节#编译
 
 编译
 ---------------------------------
 
 所有的编译已经集成到Make 文件夹中， 包括以下部分：
-::
+
+.. code-block:: bash
+
     ├── Makefile                        # MakeFile
     ├── README                          # README文件 
     ├── coupler-intel-mpich.sh          # 环境变量
@@ -92,7 +96,9 @@ GRISTMOM/Tools/esmf-8.3.0
     └── COUPLER.Makefile                # ${COUPLERDIR}/Makefile
 
 **1.	修改环境变量文件coupler-intel-mpich.sh**
-::
+
+.. code-block:: bash
+
   module add hdf5/1.12.0-icc19.0-mpi-x
   module add pnetcdf/1.12.2-icc19.0-mpi-x
   module add netcdf/4.8.0-icc19.0-mpi-x
@@ -116,7 +122,7 @@ GRISTMOM/Tools/esmf-8.3.0
   # 其中，LAPACK仅用于 GRIST的编译运行
 
   # 环境变量中配置ESMF：
-  export ESMF_PATH=GRISTMOM/esmf-8.3.0-intel2019
+  export ESMF_PATH=${GRISTMOM_PATH}/esmf-8.3.0-intel2019
   #export ESMFMKFILE=${ESMF_PATH}/lib/libO/Linux.intel.64.mpich.default/esmf.mk
   export ESMF_LIBDIR=${ESMF_PATH}/lib/libO/Linux.intel.64.mpich.default
   export ESMF_MODDIR=${ESMF_PATH}/mod/modO/Linux.intel.64.mpich.default
@@ -147,8 +153,10 @@ GRISTMOM/Tools/esmf-8.3.0
 
 **2.	运行编译命令**
 
-GRISTMOM/Make/Makefile 文件的使用命令：
-::
+${GRISTMOM_PATH}/Make/Makefile 文件的使用命令：
+
+.. code-block:: bash
+
   make         # 编译 所有模式 env GRIST MOM GRIST-MOM 
   make env     # 启动 环境变量 coupler-intel-mpich.sh
   make GRIST   # 编译 ParGRIST-A23-v1
@@ -173,7 +181,9 @@ GRISTMOM/Make/Makefile 文件的使用命令：
 其中，link 相关的库的链接、comp 是编译选项、switch 是WW3的源函数/子程序的选项，具体配置可参考该目录下的相关例子。
 
 编译命令:
-::
+
+.. code-block:: bash
+
     cd WW3-6.07.1/
     ./compile_clean.sh 
     #./model/bin/w3_setup model
@@ -182,16 +192,20 @@ GRISTMOM/Make/Makefile 文件的使用命令：
 运行
 ~~~~~~~~~~~~~~~
 **1.	修改运行环境**
-::
-    source GRISTMOM/Make/coupler-intel-mpich.sh 
+
+.. code-block:: bash
+
+    source ${GRISTMOM_PATH}/Make/coupler-intel-mpich.sh 
 
 **2.	修改并行计算节点数**
 
 对于MOM耦合来说，需要修改MOMSIS_layout，SIS_layout，cplcfg.rc 中对应的节点数，以和run.sh中使用的一致。
 
 **3.	运行命令**
-::
-    cd GRISTMOM/run/
+
+.. code-block:: bash
+
+    cd ${GRISTMOM_PATH}/run/
     ./batch.sh
 
 数据前处理
@@ -205,7 +219,9 @@ GRIST的前处理方法可参考章节#模式输入文件: 初值数据；#模�
 
 GRISTMOM/TOOLS/gendata-GRIST
 文件夹下主要的内容有：
-::
+
+.. code-block:: bash
+
     ├── README                    # README文件 
     ├── G6                        # G6 网格
     ├── G8                        # G8 网格
@@ -219,7 +235,9 @@ GRISTMOM/TOOLS/gendata-GRIST
 
 - 网格 
 目前提供G6/G8/G9 三套网格的基本信息，将通过namelist引入模式计算
-::
+
+.. code-block:: bash
+
     ├── G6
         ├── grist.grid_file.g6.ccvt.0d.nc      
         ├── grist.grid_file.g6.ccvt.2d.nc
@@ -230,17 +248,18 @@ GRISTMOM/TOOLS/gendata-GRIST
 
 - 所需初始场、强迫场数据 
 
-.. code-block:: ?
+.. code-block:: bash
 
-    ├── geniniFromERA5      # 利用ERA5数据制作初始场数据
-    ├── geniniFromGFS       # 利用ERA5数据制作初始场数据
-    └── gensstFromERA5      # 利用ERA5数据制作强迫场数据
+    ├── geniniFromERA5      # 利用ERA5数据制作初始场
+    ├── geniniFromGFS       # 利用GFS 数据制作初始场
+    └── gensstFromERA5      # 利用ERA5数据制作强迫场
 - 制作方法
 
-.. code-block:: ?
-    ./ GRISTMOM/TOOLS/gendata-GRIST/geniniFromERA5/scripts/pre_process.sh  
-    ./ GRISTMOM/TOOLS/gendata-GRIST/geniniFromGFS/scripts/pre_process.sh 
-    ./ GRISTMOM/TOOLS/gendata-GRIST/gensstFromERA5/scripts/pre_process.sh 
+.. code-block:: bash
+
+    ./${GRISTMOM_PATH}/TOOLS/gendata-GRIST/geniniFromERA5/scripts/pre_process.sh  
+    ./${GRISTMOM_PATH}/TOOLS/gendata-GRIST/geniniFromGFS/scripts/pre_process.sh 
+    ./${GRISTMOM_PATH}/TOOLS/gendata-GRIST/gensstFromERA5/scripts/pre_process.sh 
 
 **2.	海流+海冰模式：MOM6+SIS2**
 
@@ -263,13 +282,17 @@ GRISTMOM/TOOLS/gendata-GRIST
 **1.	大气模式：GRIST-23.6.26**
 
 GRIST模式的namelist主要有以下：
-::
+
+.. code-block:: bash
+
     ├── grist.nml
     ├── grist_lsm_noahmp.nml
     └── grist_amipw_phys.nml 
 在本耦合模式中，grist.nml 和其他GRIST配置一样，需要考虑网格、输入文件的路径等进行配置。
 因为耦合的通量部分仅配置在部分物理包中，需要特别注意 grist_amipw_phys.nml 中使用的物理包。以下是grist_amipw_phys.nml 的参考配置：
-::
+
+.. code-block:: bash
+
     &wrfphys_para    
      wrfphys_cu_scheme      = 'NTDKV381'
      wrfphys_cf_scheme      = 'RANDALL'

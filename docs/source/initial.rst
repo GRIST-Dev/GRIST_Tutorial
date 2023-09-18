@@ -21,8 +21,8 @@
 
 .. code-block:: bash
 
-  pathin='/path/to/initdata' #设置原始初值数据读取路径
-  pathou='/path/to/output' #设置初值数据生成路径
+  pathin=${Path_for_inputfile} #设置原始初值数据读取路径
+  pathou=${Path_for_outputfile} #设置初值数据生成路径
   res="G8UR" #网格名
   cdo_grid_file=/path/to/grist_scrip_gridnum.nc #设置模式网格描述文件路径（模式网格描述文件的生成请参考模式网格生成部分）
   cdo -f nc copy ${pathin}/${file} ${pathou}/${file}.tmp0.nc #将GRIB格式文件转化为nc格式
@@ -36,7 +36,7 @@
 .. code-block:: bash
 
   res=G8UR #网格分辨率
-  pathou='/path/to/output' #输出文件路径
+  pathou=${Path_for_outputfile} #输出文件路径
   lev_type=pl #数据垂直层类型
   cdo chname,var130,T,var131,U,var132,V,var133,Q ${pathin}/ERA5.${lev_type}.${year}${mon}${day}.00.grib.${res}.nc ${pathou}/initial_${res}_${lev_type}_${year}${mon}${day}.nc #将对应变量重命名为模式适用变量名
   cdo chname,var134,PS,var129,SOILH,var235,SKINTEMP,var31,XICE,var39,SoilMoist_lv1,var40,SoilMoist_lv2,var41,SoilMoist_lv3,var42,SoilMoist_lv4,\
@@ -86,10 +86,10 @@
 相应的需要修改namelist中的初值文件读取模式，以下为namelist设置参考：
 ::
   large_atm_file_on      = .true. #开启大文件选项
-  initialAtmUFilePath    = '/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-new/grist.era5.ini.U.pl.G9B3_20080714.nc' #单独读取U
-  initialAtmVFilePath    = '/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-new/grist.era5.ini.V.pl.G9B3_20080714.nc' #单独读取V
-  initialAtmTFilePath    = '/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-new/grist.era5.ini.T.pl.G9B3_20080714.nc' #单独读取T
-  initialAtmQFilePath    = '/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G9B3-new/grist.era5.ini.Q.pl.G9B3_20080714.nc' #单独读取Q
+  initialAtmUFilePath    = ${Path_for_AtmUfile} #单独读取U
+  initialAtmVFilePath    = ${Path_for_AtmVfile} #单独读取V
+  initialAtmTFilePath    = ${Path_for_AtmTfile} #单独读取T
+  initialAtmQFilePath    = ${Path_for_AtmQfile} #单独读取Q
 
 有限区域模式的初值制作
 ----------------
@@ -118,12 +118,12 @@
 
 .. code-block:: bash
 
-  pathin='/fs2/home/zhangyi/zhouyh/data/download/mcs/init'
-  pathou='../download/netcdf/20080714/'
+  pathin=${Path_for_inputfile}
+  pathou=${Path_for_outputfile}
   mkdir -p ${pathou}
 
   hres="G8UR"
-  cdo_grid_file=/fs2/home/zhangyi/wangym/GRIST_Data-master/g8-uniform/grid/grist_scrip_655362.nc
+  cdo_grid_file=${Path_for_gridfile}
 
   for file in `ls ${pathin}` ;do
   if [ "${file##*.}"x = "grib"x ] ;then
@@ -145,13 +145,13 @@
 .. code-block:: bash
 
   res=G8UR
-  pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/raw'
+  pathou=${Path_for_outputfile}
   lev_type=pl
   mkdir -p ${pathou}
   for year in 2008 ;do
   for mon in 07 ;do
   for day in 14 ;do
-  pathin=../download/netcdf/${year}${mon}${day}/
+  pathin=${Path_for_netcdf_file}/${year}${mon}${day}/
   echo ${year} ${mon} ${day} 
   if true ;then
     cdo chname,var130,T,var131,U,var132,V,var133,Q ${pathin}/ERA5.${lev_type}.${year}${mon}${day}.00.grib.${res}.nc ${pathou}/initial_${res}_${lev_type}_${year}${mon}${day}.nc
@@ -185,8 +185,8 @@
 .. code-block:: bash
 
   res=G8UR
-  pathin='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/raw'
-  pathou='/fs2/home/zhangyi/wangym/GRIST_Data-master/init/geniniFromERA5/download/G8UR'
+  pathin=${Path_for_inputfile}
+  pathou=${Path_for_outputfile}
   lev_type=pl
   lvname=plev
   mkdir -p ${pathou}
@@ -242,7 +242,7 @@
 
 .. code-block:: bash
 
-  inpth=../data
+  inpth=${Path_for_inputfile}
   oupth=GRIST_lamData
   filehead=GRIST.ATM.CPTP-50_3.5km.amipw
   mkdir -p ${oupth}

@@ -14,13 +14,14 @@
 
 首先进入grist_lib库的编译目录：
 
-::
+.. code-block:: bash
 
      $ cd ${GRIST_HOME}/src/grist_lib/bld
 
 然后修改Makefile文件中的编译选项：修改 FC、 CC 和 CXX选项来指定 Fortran、 C 和 CXX的编译器(对于 Intel2018版本编译器，示例配置为: FC = mpiifort，CC = mpiicc，CXX = mpiicpc)。然后修改 METIS_LIB 指定 METIS lib 目录。
 以上步骤完成后，输入：
-::
+
+.. code-block:: bash
 
      $ make lib
 
@@ -31,7 +32,7 @@
 
 用户需根据计算机运行环境在编译目录中修改Makefile文件中NETCDF、PNETCDF、LAPACK和METIS_LIB路径，修改后执行make.sh命令完成编译。编译选项为：mpifort -fp-model precise -DRRTMG_V381 -DSPIO -DUSE_HALO2 -DUSE_LEAP_YEAR -convert big_endian -r8 -DAMIPW_PHYSICS -DAMIPW_CLIMATE -DUSE_NOAHMP -DCDATE
 
-::
+.. code-block:: bash
 
      #进入编译目录
      $ cd ${GRIST_HOME}/bld/build_amipw
@@ -45,7 +46,7 @@
 
 以上步骤完成后，即可运行GRIST_AMIPW。模式所需前处理文件请参考 :doc:`initial` 、 :doc:`forcing` 和 :doc:`grid` 这几部分生成或获取，如已制作过前处理文件，则可以直接进入模式运行阶段。
 
-::
+.. code-block:: bash
 
      #进入运行目录
      $ cd ${GRIST_HOME}/run/${EXENAME}

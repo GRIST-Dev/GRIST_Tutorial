@@ -94,9 +94,9 @@ grist.nml的部分设置参考：
 
      #设置初始场、强迫数据以及模态等参数
      &data_para
-     initialAtmFilePath    = '${HOME}/grist/inputdata/init/initialData/20120526/uniform-g6/grist.initial.pl.g6_20120526.nc.new.nc'
-     initialLndFilePath    = '${HOME}/grist/inputdata/init/initialData/20120526/uniform-g6/grist_gfs_20120526.g6.nc'
-     sstFilePath           = '${HOME}/fuzhen/inputdata/amip_era5/'
+     initialAtmFilePath    = '${path_for_AtmFile}/grist.initial.pl.g6_20120526.nc.new.nc'
+     initialLndFilePath    = '${path_for_LndFile}/grist_gfs_20120526.g6.nc'
+     sstFilePath           = '${path_for_sstFile}'
      initialDataSorc       = 'ERAIP'
      numMonSST             = 122
      sstFile_year_beg      = 2000

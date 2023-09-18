@@ -1,7 +1,7 @@
 单柱模式
 ================
 
-单柱模式（GRIST_SCM）运行与三维全球模拟相同的物理过程。GRIST_SCM使用适度计算机资源，提供对物理参数化更改的快速反馈，大多数错误可以通过单柱模式快速检测和诊断。它通常用于物理参数化开发和参数调优测试。它也是一种计算效率高的工具，用于评估不同的方案/模型所刻画的物理过程和相互作用，如热带对流、云反馈和降水日变化等。GRIST_SCM可以分别运行气候物理包（AMIPC-physics）和天气物理包（AMIPW-physics）。
+单柱模式（GRIST_SCM）运行与三维全球模拟相同的物理过程。GRIST_SCM使用适度计算机资源，提供对物理参数化更改的快速反馈，大多数错误可以通过单柱模式快速检测和诊断。它通常用于物理参数化开发和参数调优测试。它也是一种计算效率高的工具，用于评估不同的方案/模型所刻画的物理过程和相互作用，如热带对流、云反馈和降水日变化等。GRIST_SCM可以分别运行气候物理包（physC）和天气物理包（PhysW）。
 
 数据可从以下链接获取：
 
@@ -18,11 +18,11 @@ https://pan.baidu.com/s/17cPfqL6mr6ZnS1T4D_UpLw?pwd=ffqs
 
 用户需根据计算机运行环境在编译目录中修改Makefile文件中NETCDF、PNETCDF、LAPACK和METIS _ LIB路径，修改后执行make.sh命令完成编译。
 
-GRIST包含2套物理包(AMIPC和AMIPW)。编译选项分别为：
+GRIST包含2套物理包(PhysC和PhysW)。编译选项分别为：
 
-AMIPC-physics：-O1 -fp-model precise -traceback -r8 -convert big_endian -DSCM_PHYSICS -DAMIPC_PHYSICS
+PhysC：-O1 -fp-model precise -traceback -r8 -convert big_endian -DSCM_PHYSICS -DAMIPC_PHYSICS
 
-AMIPW-physics：-O1 -fp-model precise -traceback -r8 -convert big_endian -DSCM_PHYSICS -DAMIPW_PHYSICS -DRRTMG_V381 -DUSE_LEAP_YEAR -DSCALE_TBCU
+PhysW：-O1 -fp-model precise -traceback -r8 -convert big_endian -DSCM_PHYSICS -DAMIPW_PHYSICS -DRRTMG_V381 -DUSE_LEAP_YEAR -DSCALE_TBCU
 
 ::
 
@@ -65,11 +65,11 @@ namelist配置参考
      day_duration             = 14 #持续时间
      model_timestep           = 1200 #时间步长
      h1_history_freq          = 9 #控制输出文件的时间间隔
-     #若采用amipc package，则
+     #若采用PhysC，则
      Ntracer                  = 5  
      physpkg                  = ‘AMIPC_PHYSICS’  
      physics_coupling         = ‘P3’ 
-     #若采用amipw package，则
+     #若采用PhysW，则
      Ntracer                  = 6
      physpkg                  = ‘AMIPW_PHYSICS’
      physics_coupling         = ‘P2’
@@ -103,11 +103,11 @@ namelist配置参考
      day_duration             = 1 #持续时间
      model_timestep           = 1200 #时间步长
      h1_history_freq          = 3 #控制输出文件的时间间隔
-     #若采用amipc package，则
+     #若采用PhysC，则
      Ntracer                  = 5  
      physpkg                  = ‘AMIPC_PHYSICS’  
      physics_coupling         = ‘P3’ 
-     #若采用amipw package，则
+     #若采用PhysW，则
      Ntracer                  = 6
      physpkg                  = ‘AMIPW_PHYSICS’
      physics_coupling         = ‘P2’
@@ -133,11 +133,11 @@ namelist配置参考
      day_duration             = 150 #持续时间
      model_timestep           = 1200 #时间步长
      h1_history_freq          = 72 #控制输出文件的时间间隔
-     #若采用amipc package，则
+     #若采用PhysC，则
      Ntracer                  = 5  
      physpkg                  = ‘AMIPC_PHYSICS’  
      physics_coupling         = ‘P3’ 
-     #若采用amipw package，则
+     #若采用PhysW，则
      Ntracer                  = 6
      physpkg                  = ‘AMIPW_PHYSICS’
      physics_coupling         = ‘P2’

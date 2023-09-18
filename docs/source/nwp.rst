@@ -89,13 +89,13 @@ grist.nml的部分设置参考：
 
      #设置初始场、强迫数据以及模态等参数
      &data_para
-     outdir                 = '/Path/to/outdir'
-     gridFilePath           = '/Path/to/grid/file'
+     outdir                 = ${Path_for_outputdir}
+     gridFilePath           = ${Path_for_gridfile}
      gridFileNameHead       = 'grist.grid_file.g9.ccvt'
-     staticFilePath         = '/Path/to/static_uniform_g9.nc'
-     initialAtmFilePath     = '/Path/to/initialAtmFile'
-     initialLndFilePath     = '/Path/to/initialLndFile'
-     sstFilePath            = '/Path/to/sstFile'
+     staticFilePath         = ${Path_for_staticfile}
+     initialAtmFilePath     = ${Path_for_initialAtmFile}
+     initialLndFilePath     = ${Path_for_initialLndFile}
+     sstFilePath            = ${Path_for_sstFile}
      initialDataSorc        = 'ERAIP'
      numMonSST              = 1
      sstFile_year_beg       = 2021

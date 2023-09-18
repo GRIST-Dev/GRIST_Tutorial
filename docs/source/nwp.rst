@@ -86,7 +86,7 @@ grist.nml的部分设置参考：
      ptend_heat_rk_on      = .true.
      use_som                = .true.
 
-::
+.. code-block:: bash
 
      #设置初始场、强迫数据以及模态等参数
      &data_para

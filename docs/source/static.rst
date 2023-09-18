@@ -87,7 +87,7 @@ namelist参考样例（使用G8分辨率网格）
 ::
     &ctl_para
     outdir                 = './'
-    gridFilePath           = '/THL8/home/zhangyi/public/GRIST/data/uniform-g8/grid/'    
+    gridFilePath           = '${path_for_GridFile}/uniform-g8/grid/'    
     gridFileHeadName       = 'grist.grid_file.g8.ccvt'
     gridRegionFileHeadName = 'grist.grid_file.newg6_lam.c5n180e.ccvt'
     /
@@ -119,7 +119,7 @@ namelist参考样例（使用G8分辨率网格）
     prefix = 'ForGrist',
     /
     &static_para
-    geog_data_path = '/THL8/home/zhangyi/grist_static/geog_raw_data/',
+    geog_data_path = '${path_for_raw_DataFile}',
     static_path = './',
     config_do_staic = .true.
     do_regional_domain     = .false.
@@ -132,14 +132,14 @@ namelist参考样例（使用G8分辨率网格）
     nSoilLevels = 4
     /
     &physics_para
-    ozone_data_path  = '/g13/zhangyi/mac/run/grist_landData/grist_init/geog_data/ozone_1.9x2.5_L26_2000clim_c091112.nc'
+    ozone_data_path  = '/${path_for_init_DataFile}/ozone_1.9x2.5_L26_2000clim_c091112.nc'
     config_do_ozone  = .false.
     /
 
 **3. topo.nl**
 ::
     &topoparams
-    raw_data_filepath = '/THL8/home/zhangyi/grist_static/geog_raw_data/ncar_cube_topo_data/'
+    raw_data_filepath = '${path_for_ncar_topo}/ncar_cube_topo_data/'
     externally_smoothed_topo_file   = 'inputdata/externally-smoothed-PHIS/USGS-gtopo30_ne30np4_16xdel2.nc'
     lsmooth_terr = .false.
     lexternal_smooth_terr = .true.

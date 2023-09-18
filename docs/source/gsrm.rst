@@ -58,7 +58,7 @@
 
 grist.nml的部分设置参考：
 
-::
+.. code-block:: bash
 
      #设置积分时长、步长等各类参数
      &ctl_para
@@ -92,7 +92,7 @@ grist.nml的部分设置参考：
      use_som               = .false.          #平板海洋模式开关
      ptendSubDiabPhys      = .true.           
 
-::
+.. code-block:: bash
 
      #设置初始场、强迫数据以及模态等参数
      &data_para

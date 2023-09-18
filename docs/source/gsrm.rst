@@ -95,18 +95,18 @@ grist.nml的部分设置参考：
 
      #设置初始场、强迫数据以及模态等参数
      &data_para
-     outdir                 = '/Path/to/outdir'                    #输出目录
-     gridFilePath           = '/Path/to/grid/file'                 #网格文件路径
+     outdir                 =  ${Path_for_outdir}                    #输出目录
+     gridFilePath           =  ${Path_for_gridFile}                 #网格文件路径
      gridFileNameHead       = 'grist.grid_file.g9.ccvt'            #网格文件前缀
-     staticFilePath         = '/Path/to/static_uniform_g9.nc'      #静态数据文件路径
+     staticFilePath         =  ${Path_for_staticFile}     #静态数据文件路径
      large_atm_file_on      = .true.                               #大初始文件开关
-     initialAtmUFilePath    = '/Path/to/AtmUFile'                  #U文件路径
-     initialAtmVFilePath    = '/Path/to/AtmVFile'                  #V文件路径
-     initialAtmTFilePath    = '/Path/to/AtmTFile'                  #T文件路径
-     initialAtmQFilePath    = '/Path/to/AtmQFile'                  #Q文件路径
-     initialAtmFilePath     = '/Path/to/Atm_singlelevel_File'      #大气单层变量文件路径
-     initialLndFilePath     = '/Path/to/LndFile'                   #陆面数据路径
-     sstFilePath            = '/Path/to/sstFile'                   #海洋强迫文件路径
+     initialAtmUFilePath    = ${Path_for_AtmUFile}                  #U文件路径
+     initialAtmVFilePath    = ${Path_for_AtmVFile}                  #V文件路径
+     initialAtmTFilePath    = ${Path_for_AtmTFile}                  #T文件路径
+     initialAtmQFilePath    = ${Path_for_AtmQFile}                 #Q文件路径
+     initialAtmFilePath     = ${Path_for_Atm_single_level_File}     #大气单层变量文件路径
+     initialLndFilePath     = ${Path_for_LndFile}                   #陆面数据路径
+     sstFilePath            = ${Path_for_sstFile}                   #海洋强迫文件路径
      initialDataSorc        = 'ERAIP'                              #初始文件类型
      numMonSST              = 1                                    #海温长度
      sstFile_year_beg       = 2021                                 #初始海温年份

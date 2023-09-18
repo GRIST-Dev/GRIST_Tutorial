@@ -84,12 +84,14 @@
   cdo selname,Q ${pathou}/grist.era5.ini.${lev_type}.${res}_${year}${mon}${day}.nc ${pathou}/grist.era5.ini.Q.${lev_type}.${res}_${year}${mon}${day}.nc #提取Q变量并单独存放
 
 相应的需要修改namelist中的初值文件读取模式，以下为namelist设置参考：
-::
+
+.. code-block:: bash
+
   large_atm_file_on      = .true. #开启大文件选项
-  initialAtmUFilePath    = ${Path_for_AtmUfile} #单独读取U
-  initialAtmVFilePath    = ${Path_for_AtmVfile} #单独读取V
-  initialAtmTFilePath    = ${Path_for_AtmTfile} #单独读取T
-  initialAtmQFilePath    = ${Path_for_AtmQfile} #单独读取Q
+  initialAtmUFilePath    = ${Path_for_AtmUFile} #单独读取U
+  initialAtmVFilePath    = ${Path_for_AtmVFile} #单独读取V
+  initialAtmTFilePath    = ${Path_for_AtmTFile} #单独读取T
+  initialAtmQFilePath    = ${Path_for_AtmQFile} #单独读取Q
 
 有限区域模式的初值制作
 ----------------

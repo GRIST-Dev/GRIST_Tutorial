@@ -87,8 +87,7 @@
     
     module load compiler/intel/composer_xe_2017.2.174 #加载inetl编译器
     module load mpi/intelmpi/2017.2.174 #加载mpi，以上均需根据计算机环境指定
-    export I_MPI_PMI_LIBRARY=/opt/gridview/slurm17/lib/libpmi.so #加载MPI库
-    export LD_LIBRARY_PATH=/g13/zhangyi/softwares/intel2017/metis-5.1.0/build/Linux-x86_64/libmetis/:${LD_LIBRARY_PATH} #加载
+    
     srun ./par.exe #运行程序
 
   修改完run.sbatch文件后，使用sbatch命令提交批处理任务::

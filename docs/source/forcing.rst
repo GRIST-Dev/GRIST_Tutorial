@@ -113,7 +113,10 @@
 ----------------
   产生有限区域模式强迫数据的方式，与全球模式类似。仅需将CDO插值采用的SCRIP模版文件替换为有限区域网格的对应文件即可。
   如果已经产生了全球模式强迫数据，也可以直接基于全球模式数据插值到有限区域网格，例如：
-  cdo remapdis,${lam_scrip_file} ${global_fileName} ${lam_fileName}
+ 
+  .. code-block:: bash
+  
+      cdo remapdis,${lam_scrip_file} ${global_fileName} ${lam_fileName}
 
 
 有限区域模式的侧边界条件(LBC)数据制作

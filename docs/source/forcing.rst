@@ -108,8 +108,15 @@
   cdo selname,tsk,sst ${pathou}/remap.tmp.nc ${fileou} #提取tsk，sst
   ncks -4 -A ${pathou}/remap.sicnew.tmp1.nc ${fileou} #拼接sst，sic，tsk
   cdo -f nc2 timmean ${fileou} ${fileouf} #生成daily强迫场
-  
-有限区域模式的边界强迫数据制作
+
+用于有限区域模式的强迫数据制作
+----------------
+  产生有限区域模式强迫数据的方式，与全球模式类似。仅需将CDO插值采用的SCRIP模版文件替换为有限区域网格的对应文件即可。
+  如果已经产生了全球模式强迫数据，也可以直接基于全球模式数据插值到有限区域网格，例如：
+  cdo remapdis,${lam_scrip_file} ${global_fileName} ${lam_fileName}
+
+
+有限区域模式的侧边界条件(LBC)数据制作
 ----------------
 有限区域模式的侧边界条件，可以由GRIST全球模式提供，也可以基于其他(再)分析数据。运行remap_lam.sh脚本对全球模式处理生成有限区域模式侧边界条件。以下为remap_lam.sh的参考设置：
 
@@ -280,7 +287,7 @@
   fi
   done
 
-  **4.remap_lam.sh**
+**4.remap_lam.sh**
 
 .. code-block:: bash
 

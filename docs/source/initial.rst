@@ -93,6 +93,12 @@
   initialAtmTFilePath    = ${Path_for_AtmTFile} #单独读取T
   initialAtmQFilePath    = ${Path_for_AtmQFile} #单独读取Q
 
+用于有限区域模式的初值数据制作
+----------------
+  产生有限区域模式初值数据的方式，与全球模式类似。仅需将CDO插值采用的SCRIP模版文件替换为有限区域网格的对应文件即可。
+  如果已经产生了全球模式初值数据，也可以直接基于全球模式数据插值到有限区域网格，例如：
+  cdo remapdis,${lam_scrip_file} ${global_fileName} ${lam_fileName}
+
 初值制作脚本参考样例（使用G8分辨率网格）
 ----------------
 **1.step1_convert.sh**

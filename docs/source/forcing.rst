@@ -109,6 +109,26 @@
   ncks -4 -A ${pathou}/remap.sicnew.tmp1.nc ${fileou} #拼接sst，sic，tsk
   cdo -f nc2 timmean ${fileou} ${fileouf} #生成daily强迫场
   
+有限区域模式的边界强迫数据制作
+----------------
+有限区域模式的侧边界条件，可以由GRIST全球模式提供，也可以基于其他(再)分析数据。运行remap_lam.sh脚本对全球模式处理生成有限区域模式侧边界条件。以下为remap_lam.sh的参考设置：
+
+.. code-block:: bash
+
+  ncks -v ps,hps              ${inpth}/${file1d_in} 1d.nc #提取经纬度和表层气压变量
+  ncks -v uPC,vPC,temperature ${inpth}/${file2d_in} 2d.nc #提取U，V和温度等2维变量
+  ncks -v tracerMxrt          ${inpth}/${file3d_in} 3d.nc #提取Q变量
+  ncrename -d location_nv,ncells 1d.nc #将location_nv重命名为ncell
+  ncrename -d location_nv,ncells 2d.nc #将location_nv重命名为ncell
+  ncrename -d location_nv,ncells 3d.nc #将location_nv重命名为ncell
+
+  ncks -A 3d.nc 2d.nc #拼接3d和2d变量
+  ncks -A 2d.nc 1d.nc  #拼接到1d变量
+  ncatted -O -a coordinates,,m,c,"lon lat" 1d.nc #为1d变量添加经纬度坐标
+  ncks -A latlon.nc 1d.nc #将经纬度信息写入1d文件
+  ncpdq -a ntracer,ncells,nlev 1d.nc 1dnew.nc #将1d文件按照 ntracer,ncells,nlev维度的顺序重组
+  ncks --mk_rec_dmn ntracer 1dnew.nc 1dnew1.nc #将ntracer设为unlimited
+  cdo -P 24 remapdis,grist.lam_scrip_2232156.nc 1dnew1.nc grid.nc #插值
 
 强迫数据制作脚本参考样例（使用G8分辨率网格）
 ----------------
@@ -259,5 +279,59 @@
   fi
   fi
   done
+
+  **4.remap_lam.sh**
+
+.. code-block:: bash
+
+  inpth=${Path_for_inputfile}
+  oupth=GRIST_lamData
+  filehead=GRIST.ATM.CPTP-50_3.5km.amipw
+  mkdir -p ${oupth}
+
+  for year in 2008 ;do
+  for mon  in 07 ;do
+  for day  in 16 17 18 19 ;do
+  for sec  in 00000 03600 07200 10800 14400 18000 21600 25200 28800 32400 36000 39600 \
+            43200 46800 50400 54000 57600 61200 64800 68400 72000 75600 79200 82800 ;do
+
+  file1d_in=${filehead}.${year}-${mon}-${day}-${sec}.1d.h1.nc
+  file2d_in=${filehead}.${year}-${mon}-${day}-${sec}.2d.h1.nc
+  file3d_in=${filehead}.${year}-${mon}-${day}-${sec}.3d.h1.nc
+
+  #select
+  ncks -v ps,hps              ${inpth}/${file1d_in} 1d.nc 
+  ncks -v uPC,vPC,temperature ${inpth}/${file2d_in} 2d.nc 
+  ncks -v tracerMxrt          ${inpth}/${file3d_in} 3d.nc 
+
+  ncrename -d location_nv,ncells 1d.nc
+  ncrename -d location_nv,ncells 2d.nc
+  ncrename -d location_nv,ncells 3d.nc
+
+  ncks -A 3d.nc 2d.nc
+  ncks -A 2d.nc 1d.nc
+  ncatted -O -a coordinates,,m,c,"lon lat" 1d.nc
+  ncks -A latlon.nc 1d.nc
+
+  #manipulate
+  ncpdq -a ntracer,ncells,nlev 1d.nc 1dnew.nc 
+  ncks --mk_rec_dmn ntracer 1dnew.nc 1dnew1.nc
+  cdo -P 24 remapdis,grist.lam_scrip_2232156.nc 1dnew1.nc grid.nc
+
+  ncks --fix_rec_dmn time grid.nc grid1.nc
+  ncrename -d time,ntracer grid1.nc
+  ncpdq -a ncells,nlev,ntracer grid1.nc ${oupth}/GRIST.lamData.${year}${mon}${day}${sec}.nc 
+
+  #rename
+  ncrename -v hps,HPS -v ps,PS -v uPC,U -v vPC,V -v temperature,T -v tracerMxrt,Q ${oupth}/GRIST.lamData.${year}${mon}${day}${sec}.nc
+
+  rm -rf 1d.nc 2d.nc 3d.nc 1dnew.nc 1dnew1.nc grid.nc grid1.nc
+
+  done
+  done
+  done
+  done
+
+  echo "sucessfully done"
 
 

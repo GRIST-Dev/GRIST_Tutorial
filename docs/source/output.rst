@@ -8,8 +8,6 @@
     2. 根据自定义时间间隔的输出（h1）。该类型下根据用户自定义的输出文件时间间隔进行输出。最短时间间隔为模式运行时间步长。
     3. 重启动文件。该类型如果开启，将产生用于模式重启动计算所需的数据。根据重启动数据的来源，主要分为大气动力文件（Dyn），大气物理文件（Phy）和陆面文件（Lnd）。
 
-  模式输出结果在诊断层进行后处理和可视化。非结构网格数据后处理可通过CDO/NCO等处理软件进行。GRIST提供了一些后处理脚本，包括变量提取，水平插值和垂直插值等。例如水平插值可利用CDO中提供的remapdis或者remapycon函数完成。除后处理外，GRIST输出文件格式也支持多种绘图软件直接进行可视化。
-
 自定义诊断变量输出
 ------------------
   为方便用户对模式进行诊断，GRIST提供了灵活的诊断变量诊断和I/O模块。其中，诊断模块主要负责定义和计算诊断变量，包括瞬时变量（inst）和时间平均变量（accu）。这些变量须为模式中无法直接输出需要诊断计算的变量，其它变量可直接在I/O模块中设置输出。I/O模块控制模式变量输出，包括诊断模块中计算的变量和可直接输出的变量。需指出，用户自定义变量输出建议都定义在诊断模块中或者直接在I/O模块中，不建议在其它模式的计算模块中额外定义。下面介绍自定义输出变量的输出流程。
@@ -65,6 +63,34 @@
 
   在以上wrap_add_field_?d函数中dycoreVarCellFull%scalar_U_wind_n为模式中的变量（模式定义变量或诊断模块中变量），"uPC"为输出文件变量名，"zonal wind speed"为变量描述，"m/s"为单位。以上为用户自定义变量输出的全部流程。
   需要指出，在编译之前需修改${GRIST_HOME}/bld/build_amipw/Filepath文件中对应路径，目前默认路径为：../../src/atmosphere/gcm/io_zy/，用户只需改为修改了诊断和I/O文件的目录即可。
+
+模式数据后处理
+------------------
+GRIST输出文件格式支持多种绘图软件直接进行可视化，也可通过CDO/NCO等处理软件进行后处理（数据拼接、向经纬度插值等）。GRIST提供了一些后处理脚本，包括变量提取，水平插值和垂直插值等。例如水平插值可利用CDO中提供的remapdis或者remapycon函数完成。
+
+cdo gendis,global_1 ../GRIST.ATM.G6.${case}.MonAvg.2001-05.1d.h0.nc weight_global_1.nc
+for ((jr=2001; jr<=2010;jr++))
+do
+for mn in {01..12}
+do
+export filehead=GRIST.ATM.G6.${case}.MonAvg.${jr}-${mn}
+cp ${filehead}.1d.h0.nc 1d.nc
+#ncks -d ntracer,0 ${filehead}.3d.nc a.nc;
+#ncwa -a ntracer a.nc 3da.nc;
+cp ${filehead}.2d.h0.nc 2da.nc;
+ncpdq -a nlev,location_nv 2da.nc 2db.nc;
+ncpdq -a nlevp,location_nv 2db.nc 2d.nc;
+#ncks 3da.nc 2d.nc<<EOF
+#a
+#EOF
+ncks 2d.nc 1d.nc <<EOF
+a
+EOF
+cdo -f nc copy 1d.nc 1d_new.nc
+cdo -P 6 remap,global_1,weight_global_1.nc 1d_new.nc ${filehead}.grid.nc;
+rm -rf 1d.nc 2d.nc 2da.nc 2db.nc 3da.nc a.nc 1d_new.nc;
+done
+done
 
 
 

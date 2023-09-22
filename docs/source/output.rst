@@ -66,9 +66,9 @@
 
 模式数据后处理
 ------------------
-GRIST输出文件格式支持多种绘图软件直接进行可视化，也可通过CDO/NCO等处理软件进行后处理（数据拼接、向经纬度插值等）。GRIST提供了一些后处理脚本，包括变量提取，水平插值和垂直插值等。例如水平插值可利用CDO中提供的remapdis或者remapycon函数完成，以下为模式输出水平插值后处理的示例脚本：
+  GRIST输出文件格式支持多种绘图软件直接进行可视化，也可通过CDO/NCO等处理软件进行后处理（数据拼接、向经纬度插值等）。GRIST提供了一些后处理脚本，包括变量提取，水平插值和垂直插值等。例如水平插值可利用CDO中提供的remapdis或者remapycon函数完成，以下为模式输出水平插值后处理的示例脚本：
 
-.. code-block:: bash
+  .. code-block:: bash
 
    cdo gendis,global_1 ../GRIST.ATM.G6.${case}.MonAvg.2001-05.1d.h0.nc weight_global_1.nc
    for ((jr=2001; jr<=2010;jr++))

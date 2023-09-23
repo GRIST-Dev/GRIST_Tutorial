@@ -13,6 +13,7 @@ GRIST模式教程
 
 .. toctree::
 
+   features
    install
    output
    grid

@@ -2,7 +2,7 @@
 ================
 总体设计
 ----------------
-  在21世纪的20年代，全球天气和气候建模在应用的空间和时间尺度上仍存显著差异。全球天气预报-气候预测行业将继续追求可达千米级的高分辨率模式（Bauer等人，2021）。应用于气候及气候变化模拟的粗分辨率全球气候模式仍然被需要（Eyring等人，2016）。学界对采用全球高分辨率公里尺度(k-scale)模型来彻底地统一全时空尺度的天气-气候模拟已有所呼吁，但是实现这一目标的过程中需要解决很多问题。
+  在21世纪的20年代，全球天气和气候建模在应用的空间和时间尺度上仍存显著差异。全球天气预报-气候预测行业将继续追求可达千米级的高分辨率模式（Bauer等人，2021）。应用于气候及气候变化模拟的粗分辨率全球气候模式仍然被需要（Eyring等人，2016）。学界对采用全球高分辨率公里尺度(k-scale)模型来彻底地统一全时空尺度的天气-气候模拟已有所呼吁(Palmer 2020)，但是实现这一目标的过程中需要解决很多问题。
 
   为了维持一个兼顾当前和未来的可持续模式研发平台，GRIST的设计遵循应用驱动路线。这体现在该系统的几大技术特征。首先，动力框架被设计为能够在单一积分流中进行静力和非静力求解的切换。这对于粗网格分辨率（例如，>10 km）的应用尤有价值：在这些应用中使用非静力方程很难带来价值增益，通常只增加计算负担。其次，由于大气模式物理过程代码通常具有较长的使用生命周期，并且常针对不同尺度的应用进行调整。GRIST被设计为能够与不同的天气、气候模拟体系下的不同模式物理过程包兼容。这样，一套物理过程的原始应用场景可以被继承。同时，也为促进不同物理包之间的融合提供了基础。第三，GRIST系统的设计目的是不依赖于现有的、全面的软件框架或耦合系统。这有助于实现快速迭代开发，并且模式发展更具灵活性。
 
@@ -42,5 +42,13 @@
    理想物理包：
    该物理包中的物理方案源自DCMIP动力框架比较计划中的简单物理方案，用于测试和检验最简化的三维动力模式。
 
-延伸阅读：
-Zhang Y, Li J, Zhang H, Li X, Dong L, Rong X, Zhao C, Peng X, Wang Y (2023) History and Status of Atmospheric Dynamical Core Model Development in China. In: Park S. K. (Ed.) Numerical Weather Prediction: East Asian Perspectives.  
+参考文献
+~~~~~~~~~~~~~~~~~
+   1. Zhang Y, Li J, Zhang H, Li X, Dong L, Rong X, Zhao C, Peng X, Wang Y (2023) History and Status of Atmospheric Dynamical Core Model Development in China. In: Park S. K. (Ed.) Numerical Weather Prediction: East Asian Perspectives.   
+   2. Li X, Zhang Y, Peng X, Zhou B, Li J, Wang Y (2023) Intercomparison of the weather and climate physics suites of a unified forecast–climate model system (GRIST-A22.7.28) based on single-column modeling. Geosci. Model Dev. 16:2975-2993. https://doi.org/10.5194/gmd-16-2975-2023.    
+   3. Bauer P, Dueben PD, Hoefler T, Quintino T, Schulthess TC, Wedi NP (2021) The digital revolution of Earth-system science. Nature Computational Science 1:104-113. https://doi.org/10.1038/s43588-021-00023-0.   
+   4. Palmer T (2020) Short-term tests validate long-term estimates of climate change. Nature 582:185-186.   
+   5. Zhang Y, Li J, Yu R, Liu Z, Zhou Y, Li X, Huang X (2020) A Multiscale Dynamical Model in a Dry-Mass Coordinate for Weather and Climate Modeling: Moist Dynamics and Its Coupling to Physics. Monthly Weather Review 148:2671-2699. https://doi.org/10.1175/MWR-D-19-0305.1.   
+   6. Zhang Y, Li J, Yu R, Zhang S, Liu Z, Huang J, Zhou Y (2019) A Layer-Averaged Nonhydrostatic Dynamical Framework on an Unstructured Mesh for Global and Regional Atmospheric Modeling: Model Description, Baseline Evaluation, and Sensitivity Exploration. Journal of Advances in Modeling Earth Systems 11:1685-1714. https://doi.org/10.1029/2018MS001539.   
+   7. Ullrich PA, Jablonowski C, Kent J, Lauritzen PH, Nair R, Reed KA, Zarzycki CM, Hall DM, Dazlich D, Heikes R, Konor C, Randall D, Dubos T, Meurdesoif Y, Chen X, Harris L, Kühnlein C, Lee V, Qaddouri A, Girard C, Giorgetta M, Reinert D, Klemp J, Park SH, Skamarock W, Miura H, Ohno T, Yoshida R, Walko R, Reinecke A, Viner K (2017) DCMIP2016: a review of non-hydrostatic dynamical core design and intercomparison of participating models. Geosci. Model Dev. 10:4477-4509. https://doi.org/10.5194/gmd-10-4477-2017.   
+   8. Eyring V, Bony S, Meehl GA, Senior CA, Stevens B, Stouffer RJ, Taylor KE (2016) Overview of the Coupled Model Intercomparison Project Phase 6 (CMIP6) experimental design and organization. Geosci. Model Dev. 9:1937-1958. https://doi.org/10.5194/gmd-9-1937-2016.   

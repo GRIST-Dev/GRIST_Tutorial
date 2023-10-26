@@ -17,11 +17,8 @@
     #. 准备前处理数据
     #. 运行模式
 
-编译GRIST_lib库
-  该步骤包括使用GNU make命令(gmake)编译和链接GRIST_lib库文件。用户需根据计算机运行环境在编译目录中修改Makefile文件。然后执行gmake命令完成编译。
-
 编译GRIST主程序
-  该步骤和上述步骤相似。其流程和编译GRIST_lib一致：进入编译目录，修改Makefile文件，修改后执行make.sh命令完成编译。
+  该步骤包括使用GNU make命令(gmake)编译和链接GRIST主程序。用户需根据计算机运行环境在编译目录中修改build.sh文件。然后执行sh build.sh命令完成编译。
 
 准备前处理数据
   该步骤生成模式运行所必要的前处理文件，包括网格文件，初/边值条件文件以及静态数据文件。
@@ -33,29 +30,23 @@
 ----------------
   下面几小节中会给出交互式shell命令来编译和运行GRIST模式。大部分情况下，建议将这些步骤封装在shell脚本中。这样做最重要的优点是它可以记录每一步用户所做的运行步骤。
 
-编译GRIST_lib库
-~~~~~~~~~~~~~~~~
-  首先进入grist_lib库的编译目录::
-
-    $ cd ${GRIST_HOME}/src/grist_lib/bld
-  
-  然后修改Makefile文件中的编译选项：修改 FC、 CC 和 CXX选项来指定 Fortran、 C 和 CXX的编译器(对于 Intel 编译器，示例配置为: FC = mpifort，CC = mpiicc，CXX = mpiicpc)。然后修改 METIS _ LIB 指定 METIS lib 目录。
-  以上步骤完成后，输入::
-
-    $ make lib
-  等待编译完成。
-
 编译GRIST主程序
 ~~~~~~~~~~~~~~~~
-  GRIST_lib编译完成后，可对GRIST主程序进行编译。首先选择编译的GRIST工作模式并进入该工作模式目录（包括amipc：配置了气候试验物理包，适用于长期历史模拟试验, amipw：配置了天气试验物理包，适用于天气预报类型的数值模拟, gcm：配置了简单的物理包，适用于三维大气动力框架测试, scm：单柱模式，主要用于测试物理包以及动力和物理的耦合, swe：2维浅水模型），这里以amipw模式的编译为例::
+  首先进入grist模式的编译目录::
 
-    $ cd ${GRIST_HOME}/bld/build_amipw
-  修改该目录下的Makefile文件：修改 NETCDF、 PNETCDF、 LAPACK 和 METIS来指定对应软件的路径。修改 EXEDIR 指定 GRIST 的可执行文件目录。然后修改 FC 指定 Fortran 编译器。
-  修改完成后，输入::
-
-    $ ./make.sh
-  对GRIST可执行程序进行编译。
-  如果编译成功，执行目录中会出现两个可执行文件: ${model}.exe 和 parttion.exe。这代表GRIST整个编译流程完成。
+    $ cd ${GRIST_HOME}/src/grist_lib/bld/build_grist
+  
+  然后修改build.sh文件中的编译选项：修改 Fortran_Compiler、 CC 和 C++选项来指定 Fortran、 C 和 C++的编译器(基于openmpi的 Intel 编译器，示例配置为: Fortran_Compiler = mpifort，CC = mpicc，C++ = mpicxx)。然后修改NETCDF_PATH、PNETCDF_PATH、LAPACK_PATH、METIS_LIB_PATH和GRIST_LIB_PATH（模式自带库：${GRIST_HOME}/src/grist_lib/bld）指定各依赖库的路径目录。同时，模式提供了PREFIX选项指定生成主程序的目录。
+  以上步骤完成后可选择GRIST工作模式对GRIST主程序进行编译，当前支持的工作模式包括：
+      1、amipc：配置了气候试验物理包的三维全球模式，适用于长期历史模拟试验
+      2、amipw：配置了天气预报试验物理包的三维全球模式，适用于天气预报类型的数值模拟
+      3、lam_amipw: 配置了天气试验物理包的三维有限区域模式，适用于对关注区域的天气预报类型的数值模拟
+      4、gcm：配置了简单的物理包的三维全球模式，适用于三维大气动力框架测试
+      5、scm_physc：配置了气候试验物理包的单柱模式，主要用于测试气候试验物理包以及动力和物理的耦合
+      6、scm_physw:, 配置了天气试验物理包的单柱模式，主要用于测试天气预报试验物理包以及动力和物理的耦合
+  选择合适的工作模式后输入::
+    $ sh build.sh ${工作模式}
+  等待编译完成。如果编译成功，${PREFIX}中会出现两个可执行文件: ${model}.exe 和 parttion.exe。这代表GRIST整个编译流程完成。
 
 准备前处理数据
 ~~~~~~~~~~~~~~~~

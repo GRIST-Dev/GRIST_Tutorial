@@ -32,10 +32,9 @@
 
 编译GRIST主程序
 ~~~~~~~~~~~~~~~~
-  首先进入grist模式的编译目录
+首先进入grist模式的编译目录
 ::
     $ cd ${GRIST_HOME}/src/grist_lib/bld/build_grist
-  
   然后修改build.sh文件中的编译选项：修改 Fortran_Compiler、 CC 和 C++选项来指定 Fortran、 C 和 C++的编译器(基于openmpi的 Intel 编译器，示例配置为: Fortran_Compiler = mpifort，CC = mpicc，C++ = mpicxx)。然后修改NETCDF_PATH、PNETCDF_PATH、LAPACK_PATH、METIS_LIB_PATH和GRIST_LIB_PATH（模式自带库：${GRIST_HOME}/src/grist_lib/bld）指定各依赖库的路径目录。同时，模式提供了PREFIX选项指定生成主程序的目录。
   以上步骤完成后可选择GRIST工作模式对GRIST主程序进行编译，当前支持的工作模式包括：
       #. amipc：配置了气候试验物理包的三维全球模式，适用于长期历史模拟试验

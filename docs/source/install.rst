@@ -18,7 +18,7 @@
     #. 运行模式
 
 编译GRIST主程序
-  该步骤包括使用GNU make命令(gmake)编译和链接GRIST主程序。用户需根据计算机运行环境在编译目录中修改build.sh文件。然后执行sh build.sh ${工作模式}命令完成编译。
+  该步骤包括使用GNU make命令(gmake)编译和链接GRIST主程序。用户需根据计算机运行环境在编译目录中修改build.sh文件。然后执行sh build.sh ${工作模式} 命令完成编译。
 
 准备前处理数据
   该步骤生成模式运行所必要的前处理文件，包括网格文件，初/边值条件文件以及静态数据文件。
@@ -35,11 +35,11 @@
 首先进入grist模式的编译目录:
 
 .. code-block:: bash
-    
-    $ cd ${GRIST_HOME}/src/grist_lib/bld/build_grist
+
+  $ cd ${GRIST_HOME}/src/grist_lib/bld/build_grist 
  
- 然后修改build.sh文件中的编译选项：修改 Fortran_Compiler、 CC 和 C++选项来指定 Fortran、 C 和 C++的编译器(基于openmpi的 Intel 编译器，示例配置为: Fortran_Compiler = mpifort，CC = mpicc，C++ = mpicxx)。然后修改NETCDF_PATH、PNETCDF_PATH、LAPACK_PATH、METIS_LIB_PATH和GRIST_LIB_PATH（模式自带库：${GRIST_HOME}/src/grist_lib/bld）指定各依赖库的路径目录。同时，模式提供了PREFIX选项指定生成主程序的目录。
-  以上步骤完成后可选择GRIST工作模式对GRIST主程序进行编译，当前支持的工作模式包括：
+然后修改build.sh文件中的编译选项：修改 Fortran_Compiler、 CC 和 C++选项来指定 Fortran、 C 和 C++的编译器(基于openmpi的 Intel 编译器，示例配置为: Fortran_Compiler = mpifort，CC = mpicc，C++ = mpicxx)。然后修改NETCDF_PATH、PNETCDF_PATH、LAPACK_PATH、METIS_LIB_PATH和GRIST_LIB_PATH（模式自带库：${GRIST_HOME}/src/grist_lib/bld）指定各依赖库的路径目录。同时，模式提供了PREFIX选项指定生成主程序的目录。
+以上步骤完成后可选择GRIST工作模式对GRIST主程序进行编译，当前支持的工作模式包括：
       #. amipc：配置了气候试验物理包的三维全球模式，适用于长期历史模拟试验
       #. amipw：配置了天气预报试验物理包的三维全球模式，适用于天气预报类型的数值模拟
       #. lam_amipw: 配置了天气试验物理包的三维有限区域模式，适用于对关注区域的天气预报类型的数值模拟
@@ -51,6 +51,7 @@
 .. code-block:: bash
     
     $ sh build.sh ${工作模式}
+
 等待编译完成。如果编译成功，${PREFIX}中会出现两个可执行文件: ${model}.exe 和 parttion.exe。这代表GRIST整个编译流程完成。
 
 准备前处理数据

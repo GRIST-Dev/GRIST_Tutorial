@@ -30,6 +30,7 @@ GRIST模式教程
    gsrm 
    SCM
    couple
+   FAQ
    appendix
    references
    support

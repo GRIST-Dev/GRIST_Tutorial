@@ -10,8 +10,14 @@
     根据不同的初值来源，GRIST模式支持多种垂直坐标类型的读取（包括：气压坐标、混合坐标等）。读取不同垂直坐标类型的初值需利用namelist设置对应的读取方式。当前模式支持的垂直坐标及namelist设置为：
         1. 气压坐标系：namelist：initialDataSorc="ERAIP/GFS", gcm_testcase="real-ERAIP/real-GFS"
         2. 混合坐标系：namelist：initialDataSorc="ERAIM", gcm_testcase="real-ERAIM"
-        3. 干质量坐标系：namelist:initialDataSorc="WRFDA", gcm_testcase="real-WRFDA"
+        3. WRF模式坐标系：namelist:initialDataSorc="WRFDA", gcm_testcase="real-WRFDA"
  
 模式时步设置
 ----------------
-    GRIST模式时步包括：model_timestep, dycore_timestep和tracer_timestep。其中dycore_timestep设置需小于tracer_timestep,且model_timestep需为dycore_timestep和tracer_timestep的整数倍。以典型的天气预报设置为例：model_timestep=450, dycore_timesetp=56.25, tracer_timestep=225。
+    GRIST模式时步包括：  
+    model_timestep   (最外层)
+    tracer_timestep （中间层）
+    dycore_timestep （最内层）
+    
+    dycore_timestep<=tracer_timestep; tracer_timestep<=model_timestep；
+    且两个相邻step必须为整数倍。比如，model_timestep=1200, tracer_timestep=600, dycore_timesetp=300。

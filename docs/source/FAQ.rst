@@ -8,9 +8,9 @@
 初值垂直坐标设置
 ----------------
     根据不同的初值来源，GRIST模式支持多种垂直坐标类型的读取（包括：气压坐标、混合坐标等）。读取不同垂直坐标类型的初值需利用namelist设置对应的读取方式。当前模式支持的垂直坐标及namelist设置为：
-        1、气压坐标系：namelist：initialDataSorc="ERAIP/GFS", gcm_testcase="real-ERAIP/real-GFS"
-        2、混合坐标系：namelist：initialDataSorc="ERAIM", gcm_testcase="real-ERAIM"
-        3、干质量坐标系：namelist:initialDataSorc="WRFDA", gcm_testcase="real-WRFDA"
+        1. 气压坐标系：namelist：initialDataSorc="ERAIP/GFS", gcm_testcase="real-ERAIP/real-GFS"
+        2. 混合坐标系：namelist：initialDataSorc="ERAIM", gcm_testcase="real-ERAIM"
+        3. 干质量坐标系：namelist:initialDataSorc="WRFDA", gcm_testcase="real-WRFDA"
  
 模式时步设置
 ----------------

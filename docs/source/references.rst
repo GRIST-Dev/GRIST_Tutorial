@@ -1,6 +1,16 @@
 参考文献
 ==============
 
+**2024:**
+  
+  王一鸣，张祎，李晓涵，刘壮，周逸辉. 2024. GRIST天气-气候一体化模式系统框架功能设计和应用[J]. 气象科技进展.
+
+  王一鸣, 李晓涵, 张祎, 原韦华, 周逸辉, 李建. GRIST模式全球0.125度基线配置的中期降水预报性能分析[J]. 大气科学. DOI: 10.3878/j.issn.1006-9895.2309.22223
+
+  Sun, W., J. Li, R. Yu, N. Li, and Y. Zhang, (2024), Exploring changes of precipitation extremes under climate change through global variable-resolution modeling. Science Bulletin, 69(2), 237-247.doi:https://doi.org/10.1016/j.scib.2023.11.013.
+
+  Fu, Z., Y. Zhang, X. Li, and X. Rong, (2024), Intercomparison of Two Model Climates Simulated by a Unified Weather-Climate Model System (GRIST), Part I: Mean State. Climate Dynamics.
+
 **2023:**
 
   Li, X., Y. Zhang, Y. Lin, X. Peng, B. Zhou, P. Zhai, and J. Li, (2023), Impact of Revised Trigger and Closure of the Double-Plume Convective Parameterization on Precipitation Simulations over East Asia. Advances in Atmospheric Sciences, 40(7), 1225-1243.doi:10.1007/s00376-022-2225-9.
@@ -14,9 +24,6 @@
   陈苏阳，张祎，周逸辉，李晓涵，王一鸣，陈昊明. 2023. GRIST模式夏季气候回报试验中东亚降水季节内特征的评估. 气象学报，81（2）：269-285 doi:  10.11676/qxxb2023.20220120.
 
   李晓涵，张祎，林岩銮，彭新东，李建. 2023. 一套湿物理参数化方案在GRIST全球模式中的应用及其对模式气候的影响[J]. 气象学报. doi: 10.11676/qxxb2023.20230001.
-
-  王一鸣，张祎，李晓涵，刘壮，周逸辉. 2023. GRIST天气-气候一体化模式系统框架功能设计和应用[J]. 气象科技进展.
-
 
 **2022:**
 

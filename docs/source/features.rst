@@ -41,15 +41,3 @@
    
    理想物理包：
    该物理包中的物理方案源自DCMIP动力框架比较计划中的简单物理方案，用于测试和检验最简化的三维动力模式。
-
-参考文献
-----------------
-   1. Zhang Y, Li J, Zhang H, Li X, Dong L, Rong X, Zhao C, Peng X, Wang Y (2023) History and Status of Atmospheric Dynamical Core Model Development in China. In: Park S. K. (Ed.) Numerical Weather Prediction: East Asian Perspectives.   
-   2. Li X, Zhang Y, Peng X, Zhou B, Li J, Wang Y (2023) Intercomparison of the weather and climate physics suites of a unified forecast–climate model system (GRIST-A22.7.28) based on single-column modeling. Geosci. Model Dev. 16:2975-2993. https://doi.org/10.5194/gmd-16-2975-2023.    
-   3. Bauer P, Dueben PD, Hoefler T, Quintino T, Schulthess TC, Wedi NP (2021) The digital revolution of Earth-system science. Nature Computational Science 1:104-113. https://doi.org/10.1038/s43588-021-00023-0.   
-   4. Palmer T (2020) Short-term tests validate long-term estimates of climate change. Nature 582:185-186.   
-   5. Zhang Y, Li J, Yu R, Liu Z, Zhou Y, Li X, Huang X (2020) A Multiscale Dynamical Model in a Dry-Mass Coordinate for Weather and Climate Modeling: Moist Dynamics and Its Coupling to Physics. Monthly Weather Review 148:2671-2699. https://doi.org/10.1175/MWR-D-19-0305.1.   
-   6. Zhang Y, Li J, Yu R, Zhang S, Liu Z, Huang J, Zhou Y (2019) A Layer-Averaged Nonhydrostatic Dynamical Framework on an Unstructured Mesh for Global and Regional Atmospheric Modeling: Model Description, Baseline Evaluation, and Sensitivity Exploration. Journal of Advances in Modeling Earth Systems 11:1685-1714. https://doi.org/10.1029/2018MS001539.   
-   7. Ullrich PA, Jablonowski C, Kent J, Lauritzen PH, Nair R, Reed KA, Zarzycki CM, Hall DM, Dazlich D, Heikes R, Konor C, Randall D, Dubos T, Meurdesoif Y, Chen X, Harris L, Kühnlein C, Lee V, Qaddouri A, Girard C, Giorgetta M, Reinert D, Klemp J, Park SH, Skamarock W, Miura H, Ohno T, Yoshida R, Walko R, Reinecke A, Viner K (2017) DCMIP2016: a review of non-hydrostatic dynamical core design and intercomparison of participating models. Geosci. Model Dev. 10:4477-4509. https://doi.org/10.5194/gmd-10-4477-2017.   
-   8. Eyring V, Bony S, Meehl GA, Senior CA, Stevens B, Stouffer RJ, Taylor KE (2016) Overview of the Coupled Model Intercomparison Project Phase 6 (CMIP6) experimental design and organization. Geosci. Model Dev. 9:1937-1958. https://doi.org/10.5194/gmd-9-1937-2016.  
-   9. Yu R (1994) A Two-Step Shape-Preserving Advection Scheme. Advances in Atmospheric Sciences 11(4):479-490.  

@@ -2,7 +2,7 @@
 ==============
 
 **2024:**
-
+  
   Chen, S., Zhang, Y., Wang, Y., Liu, Z., Li, X., and Xue, W.: Mixed-Precision Computing in the GRIST Dynamical Core for Weather and Climate Modelling, Geosci. Model Dev. Discuss. [preprint], https://doi.org/10.5194/gmd-2024-68, in review, 2024.
 
   Zhang, Y., Liu, Z., Wang, Y. & Chen, S. (2024) Establishing a limited-area model based on a global model: A consistency study. Quarterly Journal of the Royal Meteorological Society, doi:https://doi.org/10.1002/qj.4804.

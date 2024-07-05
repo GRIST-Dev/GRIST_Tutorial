@@ -25,10 +25,9 @@ GRIST模式教程
    initial
    forcing
    AMIP
-   nwp 
-   gsrm 
+   nwp
+   gsrm
    SCM
-   couple
    appendix
    references
    support

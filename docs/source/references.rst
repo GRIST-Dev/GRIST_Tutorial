@@ -2,14 +2,24 @@
 ==============
 
 **2024:**
-  
-  王一鸣，张祎，李晓涵，刘壮，周逸辉. 2024. GRIST天气-气候一体化模式系统框架功能设计和应用[J]. 气象科技进展.
 
-  王一鸣, 李晓涵, 张祎, 原韦华, 周逸辉, 李建. GRIST模式全球0.125度基线配置的中期降水预报性能分析[J]. 大气科学. DOI: 10.3878/j.issn.1006-9895.2309.22223
+  Chen, S., Zhang, Y., Wang, Y., Liu, Z., Li, X., and Xue, W.: Mixed-Precision Computing in the GRIST Dynamical Core for Weather and Climate Modelling, Geosci. Model Dev. Discuss. [preprint], https://doi.org/10.5194/gmd-2024-68, in review, 2024.
 
-  Sun, W., J. Li, R. Yu, N. Li, and Y. Zhang, (2024), Exploring changes of precipitation extremes under climate change through global variable-resolution modeling. Science Bulletin, 69(2), 237-247.doi:https://doi.org/10.1016/j.scib.2023.11.013.
+  Zhang, Y., Liu, Z., Wang, Y. & Chen, S. (2024) Establishing a limited-area model based on a global model: A consistency study. Quarterly Journal of the Royal Meteorological Society, doi:https://doi.org/10.1002/qj.4804.
+
+  Li, X., W. Chu, Y. Zhang, and Y. Wang, (2024), Extending a dry-environment convection parameterization to couple with moist turbulence and a baseline evaluation in the GRIST model. Quarterly Journal of the Royal Meteorological Society, doi:https://doi.org/10.1002/qj.4763.
 
   Fu, Z., Y. Zhang, X. Li, and X. Rong, (2024), Intercomparison of Two Model Climates Simulated by a Unified Weather-Climate Model System (GRIST), Part I: Mean State. Climate Dynamics.
+
+  Sun, W., J. Li, R. Yu, N. Li, and Y. Zhang, (2024), Exploring changes of precipitation extremes under climate change through global variable-resolution modeling. Science Bulletin, 69(2), 237-247. doi:https://doi.org/10.1016/j.scib.2023.11.013.
+
+  陈湉茹, 张祎, 孙溦, 李妮娜, 刘鸿波, 徐幼平. 2024. 应用GRIST模式对“23·7”华北极端降水的模拟试验[J]. 暴雨灾害, 43(3): 276-287. DOI: 10.12406/byzh.2023-263.
+  
+  张萌, 李晓涵, 陈湉茹, 张祎. 2024: GRIST单柱模式及其在评估两套物理方案包中的应用. 气象学报. DOI: 10.11676/qxxb2024.20230152.
+
+  王一鸣，张祎，李晓涵，刘壮，周逸辉. 2024. GRIST天气-气候一体化模式系统框架功能设计和应用[J]. 气象科技进展.
+
+  王一鸣, 李晓涵, 张祎, 原韦华, 周逸辉, 李建. GRIST模式全球0.125度基线配置的中期降水预报性能分析[J]. 大气科学. DOI: 10.3878/j.issn.1006-9895.2309.22223.
 
 **2023:**
 

@@ -171,8 +171,6 @@ ${GRISTMOM_PATH}/Make/Makefile 文件的使用命令：
 具体各模式的编译命令可在 Makefile 中查看
 
 各个模式编译需要的Makefile 也在文件夹中列出。
-                                      
-
 
 **3.	海浪模式：WW3 **
 

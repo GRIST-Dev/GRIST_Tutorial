@@ -24,7 +24,7 @@ ESMF(Earth System Modeling Frame) 是由NASA提出并维护的面向地球系统
 
 下载地址：https://github.com/NOAA-GFDL/MOM6-examples
 
-**4.	海浪模式：WW3 6.07[未上线]**
+**4.	海浪模式：WW3 6.07**
 
 下载地址：https://github.com/NOAA-EMC/WW3
 
@@ -137,14 +137,15 @@ ${GRISTMOM_PATH}/Tools/esmf-8.3.0
   export LD_LIBRARY_PATH=${METIS_PATH}/lib/:$LD_LIBRARY_PATH
   export LD_LIBRARY_PATH=${ESMF_LIBDIR}:$LD_LIBRARY_PATH
 
-  # 为WW3做准备
-  # export WW3_DIR=WW3-6.07.1
-  # export PATH=${WW3_DIR}/model/bin:${PATH} 
-  # export PATH=${WW3_DIR}/model/exe:${PATH}
-  # export WWATCH3_NETCDF=NC4
-  # export NETCDF_PATH_LIBDIR=${NETCDF_PATH}/lib
-  # export NETCDF_PATH_INCDIR=${NETCDF_PATH}/include
-  # export NETCDF_PATH_CONFIG=${NETCDF_PATH}/bin/nc-config
+  # WW3
+    export WWATCH3_DIR=WW3-6.07
+    export PATH=${WWATCH3_DIR}/model/bin:${PATH}
+    export PATH=${WWATCH3_DIR}/model/exe:${PATH}
+    export WWATCH3_NETCDF=NC4
+    export NETCDF_LIBDIR=${NETCDF_PATH}/lib
+    export NETCDF_INCDIR=${NETCDF_PATH}/include
+    export NETCDF_CONFIG=${NETCDF_PATH}/bin/nc-config
+
   #-------------------------------------------------
 
   ulimit -s unlimited
@@ -170,15 +171,17 @@ ${GRISTMOM_PATH}/Make/Makefile 文件的使用命令：
 具体各模式的编译命令可在 Makefile 中查看
 
 各个模式编译需要的Makefile 也在文件夹中列出。
-                                      
 
+**3.	海浪模式WW3**
 
+编译之前需要指定  WW3-6.07.1/model/bin/ 中的文件： link、 comp、 switch
+其中，link 相关的库的链接、comp 是编译选项、switch 是WW3的源函数/子程序的选项，具体配置可参考WW3-6.07.1/regtests/目录下的相关例子。
 
-**3.	海浪模式：WW3 [未上线]**
+为实现耦合修改以下文件：w3profsmd.ftn ww3_esmf.ftn w3_make w3_automake make_makefile.sh
+    w3profsmd.ftn | 由于GRIST运行需配置LAPACK库，与WW3 中的w3profsmd.ftn 冲突，因此修改w3profsmd.ftn中一些变量和程序名（搜索 WITH-GRIST ）
+    ww3_esmf.ftn  | 为适配ESMF/NUOPC耦合器需要调整的run、exchange和mesh_define 等子程序
+    w3_make w3_automake make_makefile.sh | 修改WW3 配套的编译脚本以实现编译ww3_esmf.ftn  ---> 生成 ww3_esmf.o libww3_esmf.a
 
-编译之前需要指定  WW3-6.07.1/model/bin/ 中的文件： link、 comp、  switch
-
-其中，link 相关的库的链接、comp 是编译选项、switch 是WW3的源函数/子程序的选项，具体配置可参考该目录下的相关例子。
 
 编译命令:
 
@@ -199,7 +202,8 @@ ${GRISTMOM_PATH}/Make/Makefile 文件的使用命令：
 
 **2.	修改并行计算节点数**
 
-对于MOM耦合来说，需要修改MOMSIS_layout，SIS_layout，cplcfg.rc 中对应的节点数，以和run.sh中使用的一致。
+对于GRIST-MOM耦合来说，需要修改MOMSIS_layout，SIS_layout，cplcfg.rc 中对应的节点数，以和run.sh中使用的一致。
+对于GRIST-WW3耦合来说，并行节点数需要和ww3_grid 中的频率、波向的分组有关，需配置对应的参数。
 
 **3.	运行命令**
 
@@ -217,19 +221,18 @@ GRIST的前处理方法可参考章节#模式输入文件: 初值数据；#模�
 
 在这里我们提供了一些简单的可以生成GRIST 初始场和强迫场的脚本。
 
-GRISTMOM/TOOLS/gendata-GRIST
+TOOLS/gendata-GRIST
 文件夹下主要的内容有：
 
 .. code-block:: bash
 
     ├── README                    # README文件 
-    ├── G6                        # G6 网格
-    ├── G8                        # G8 网格
-    ├── G9                        # G9 网格
+    ├── GRID                      # 网格 (G6\G8\G9\cptp_50_3.5km_20230917  ....)
     ├── geniniFromERA5            # 利用ERA5 数据做初始场
     ├── geniniFromGFS             # 利用GFS  数据做初始场
     ├── gensstFromERA5            # 利用ERA5 数据做强迫场
-    ├── namelist                  # 生成namelist的脚本
+    ├── gensstFromGFS             # 利用GFS  数据做强迫场
+    ├── namelist                  # 生成namelist的脚本以及namelist的例子
     ├── wrf-data                   
     └── noahmp_data
 
@@ -237,14 +240,14 @@ GRISTMOM/TOOLS/gendata-GRIST
 目前提供G6/G8/G9 三套网格的基本信息，将通过namelist引入模式计算
 
 .. code-block:: bash
-
-    ├── G6
-        ├── grist.grid_file.g6.ccvt.0d.nc      
-        ├── grist.grid_file.g6.ccvt.2d.nc
-        ├── static_uniform_g6.nc             #静态数据，制作方法参考章节#模式输入文件: 静态数据
-        ├── grist_scrip_655362.nc
-    ├── G8      
-    └── G9
+   ├── GRID
+        ├── G6
+            ├── grist.grid_file.g6.ccvt.0d.nc      
+            ├── grist.grid_file.g6.ccvt.2d.nc
+            ├── static_uniform_g6.nc             #静态数据，制作方法参考章节#模式输入文件: 静态数据
+            ├── grist_scrip_655362.nc
+        ├── G8      
+        └── G9
 
 - 所需初始场、强迫场数据 
 
@@ -252,7 +255,10 @@ GRISTMOM/TOOLS/gendata-GRIST
 
     ├── geniniFromERA5      # 利用ERA5数据制作初始场
     ├── geniniFromGFS       # 利用GFS 数据制作初始场
-    └── gensstFromERA5      # 利用ERA5数据制作强迫场
+
+    ├── gensstFromERA5      # 利用ERA5数据制作强迫场
+    └── gensstFromGFS       # 利用GFS  数据做强迫场
+
 - 制作方法
 
 .. code-block:: bash
@@ -260,6 +266,7 @@ GRISTMOM/TOOLS/gendata-GRIST
     ./${GRISTMOM_PATH}/TOOLS/gendata-GRIST/geniniFromERA5/scripts/pre_process.sh  
     ./${GRISTMOM_PATH}/TOOLS/gendata-GRIST/geniniFromGFS/scripts/pre_process.sh 
     ./${GRISTMOM_PATH}/TOOLS/gendata-GRIST/gensstFromERA5/scripts/pre_process.sh 
+    ./${GRISTMOM_PATH}/TOOLS/gendata-GRIST/gensstFromGFS/scripts/pre_process.sh 
 
 **2.	海流+海冰模式：MOM6+SIS2**
 
@@ -269,15 +276,43 @@ GRISTMOM/TOOLS/gendata-GRIST
 
 - 制作方法
 
-**3.	海浪模式：WW3 [未上线]**
 
+**3.	海浪模式：WW3 **
+路径： ~/gaoj/TOOLS/gendata-WW3/
 - 网格
+TOOLS/gendata-WW3/GRID
+
+.. code-block:: bash
+
+
+    ├── GLO_15m         #  1/4°分辨率的全球网格数据 
+        ├── GLO_15m.depth_ascii
+        ├── GLO_15m.maskorig_ascii
+        ├── GLO_15m.meta
+        ├── GLO_15m.obstr_lev1
+        ├── gridgen.GLOB-15M_etopo1.nml
+        ├── namelists_ww3_grid.nml
+
+    ├── GLO_30m         #  1/2°分辨率的全球网格数据 
+    ├── GLO_60m         #  1°分辨率的全球网格数据 
+
+    ├── ncpus-10        #  1/2°分辨率的全球网格数据 + 10个节点运行时的ww3_grid 配置
+    └── ncpus-20        #  1/2°分辨率的全球网格数据 + 20个节点运行时的ww3_grid 配置
+
 
 - 所需初始场、强迫场数据
+生成脚本：TOOLS/gendata-WW3/genWindFromERA5/script_make_ERA5_wind_for_ww3.sh
+数据：
+    1）下载脚本： TOOLS/gendata-WW3/genWindFromERA5/download_era5.py
+    2）已有数据： ~/data/ERA5_DATA/*  【逐6小时，2000-2023】
 
 - 制作方法
+./~/gaoj/TOOLS/gendata-WW3/genWindFromERA5/download.sh
+./~/gaoj/TOOLS/gendata-WW3/genWindFromERA5/script_make_ERA5_wind_for_ww3.sh
+
 
 运行namelist
+
 ~~~~~~~~~~~~~~~
 **1.	大气模式：GRIST-23.6.26**
 
@@ -288,6 +323,7 @@ GRIST模式的namelist主要有以下：
     ├── grist.nml
     ├── grist_lsm_noahmp.nml
     └── grist_amipw_phys.nml 
+
 在本耦合模式中，grist.nml 和其他GRIST配置一样，需要考虑网格、输入文件的路径等进行配置。
 因为耦合的通量部分仅配置在部分物理包中，需要特别注意 grist_amipw_phys.nml 中使用的物理包。以下是grist_amipw_phys.nml 的参考配置：
 
@@ -309,25 +345,35 @@ GRIST模式的namelist主要有以下：
 
 **2.	海流+海冰模式：MOM6+SIS2**
 
-**3.	海浪模式：WW3 [未上线]**
+**3.	海浪模式：WW3 **
+WW3模式的namelist主要有以下5个文件（按照运行顺序排列）：
+
+.. code-block:: bash
+
+    ├── ww3_grid.nml    # grid   相关，修改 SPECTRUM%（波谱、波向信息和并行度相关）、TIMESTEPS%（时间步长）、GRID%（网格文件信息）、RECT%（网格nx, ny信息）
+    ├── ww3_strt.inp    # inital 相关，修改 ITPYE（建议： ITPYE=3）
+    ├── ww3_prnc.nml    # force  相关，修改 FILE%，FORCING%
+    ├── ww3_shel.nml    # run    相关，修改 DOMAIN%（运行时间、restart间隔等）、INPUT%FORCING（强迫变量），TYPE%FIELD%LIST（输出变量），DATE%FIELD（输出时间）
+    └── ww3_ounf.nml    # output 相关，输出nc文件，修改 FIELD%（时间、变量）、FILE%（文件Flag）
+
 
 数据后处理
 ~~~~~~~~~~~~~~~
 **1.	大气模式：GRIST-23.6.26**
 
-输出变量
+输出变量 {GRIST_PATH}/src/atmosphere/gcm/io_gaoj/grist_gcm_io_h1_module/F90
 
 可视化代码
 
 **2.	海流+海冰模式：MOM6+SIS2**
 
-输出变量
+输出变量 ---< diag_table
 
 可视化代码
 
-**3.	海浪模式：WW3 [未上线]**
+**3.	海浪模式WW3**
 
-输出变量
+输出变量 ---< ww3_shel.nml 、ww3_ounf.nml
 
 可视化代码
 

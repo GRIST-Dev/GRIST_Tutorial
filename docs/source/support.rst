@@ -2,8 +2,20 @@
 ==================
 GRIST模式代码
 ------------------
-  GRIST模式的源代码目前在github中托管。任何人均可通过简单的注册机制获取模式代码：
-  向grist_dev@163.com发送一封包含github用户名的邮件。管理员在收到邮件信息后即会通过注册，并提供代码获取的邀请链接。
+  
+  GRIST模式的源代码的演进版本目前在github中托管: https://github.com/GRIST-Dev/GRIST
+
+  冻结版本（Frozen version）：一些已发表文献的附件中包含了GRIST模式发展过程中的一些冻结版本，可在这些论文的附件下载：
+
+
+  1. Chen, S., Zhang, Y., Wang, Y., Liu, Z., Li, X., and Xue, W.: Mixed-precision computing in the GRIST dynamical core for weather and climate modelling, Geosci. Model Dev., 17, 6301–6318, https://doi.org/10.5194/gmd-17-6301-2024, 2024.  
+
+
+  2. Li, X., Zhang, Y., Peng, X., Zhou, B., Li, J., and Wang, Y.: Intercomparison of the weather and climate physics suites of a unified forecast–climate model system (GRIST-A22.7.28) based on single-column modeling, Geosci. Model Dev., 16, 2975–2993, https://doi.org/10.5194/gmd-16-2975-2023, 2023.  
+  
+
+  3. Fu, Z., Zhang, Y., Li, X. et al. Intercomparison of two model climates simulated by a unified weather-climate model system (GRIST), part II: Madden–Julian oscillation. Clim Dyn 63, 55 (2025). https://doi.org/10.1007/s00382-024-07527-1.   
+
 
 Bug提交
 ------------------

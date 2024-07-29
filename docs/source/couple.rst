@@ -281,7 +281,10 @@ TOOLS/gendata-GRIST
 路径： ~/gaoj/TOOLS/gendata-WW3/
 - 网格
 TOOLS/gendata-WW3/GRID
+
 .. code-block:: bash
+
+
     ├── GLO_15m         #  1/4°分辨率的全球网格数据 
         ├── GLO_15m.depth_ascii
         ├── GLO_15m.maskorig_ascii

@@ -1,15 +1,27 @@
 参考文献
 ==============
 
+**2025:**
+
+  Fu, Z., Y. Zhang, X. Li, C. Zhu, H. Liu, X. Rong, and C. li, (2025), Intercomparison of Two Model Climates Simulated by a Unified Weather-Climate Model System (GRIST), Part II: Madden-Julian Oscillation. Climate Dynamics.
+
+  Zhou, Y., R. Yu, Y. Zhang, J. Li, and H. Chen, (2025), Sensitivity of a Kilometer-Scale Variable-Resolution Global Nonhydrostatic Model to Microphysics Schemes in Simulating a Mesoscale Convective System. Advances in Atmospheric Sciences.
+
+  Duan Xiaohui, Yi Zhang, Kai Xu, Haohuan Fu, Bin Yang, Yiming Wang, Yilun Han, Siyuan Chen, Zhuangzhuang Zhou, Chenyu Wang, Dongqiang Huang, Huihai An, Xiting Ju, Haopeng Huang, Zhuang Liu, Wei Xue, Weiguo Liu, Bowen Yan, Jianye Hou, Maoxue Yu, Wenguang Chen, Jian Li, Zhao Jing, Hailong Liu, Lixin Wu, (2025), An AI-Enhanced 1km-Resolution Seamless Global Weather and Climate Model to Achieve Year-Scale Simulation Speed using 34 Million Cores. ACM PPoPP 2025, Main Conference.
+
+  郜婕，容新尧，张祎，付振，林鹏飞. 2025. 基于ESMF/NUOPC耦合框架的GRIST-WW3气-浪耦合模式及其数值模拟初探. 气象学报.
+
 **2024:**
   
-  Chen, S., Zhang, Y., Wang, Y., Liu, Z., Li, X., and Xue, W.: Mixed-Precision Computing in the GRIST Dynamical Core for Weather and Climate Modelling, Geosci. Model Dev. Discuss. [preprint], https://doi.org/10.5194/gmd-2024-68, in review, 2024.
+  Chen, S., Y. Zhang, Y. Wang, Z. Liu, X. Li, and W. Xue, (2024), Mixed-precision computing in the GRIST dynamical core for weather and climate modelling. Geosci. Model Dev., 17(16), 6301-6318.doi:10.5194/gmd-17-6301-2024.
 
   Zhang, Y., Liu, Z., Wang, Y. & Chen, S. (2024) Establishing a limited-area model based on a global model: A consistency study. Quarterly Journal of the Royal Meteorological Society, doi:https://doi.org/10.1002/qj.4804.
 
   Li, X., W. Chu, Y. Zhang, and Y. Wang, (2024), Extending a dry-environment convection parameterization to couple with moist turbulence and a baseline evaluation in the GRIST model. Quarterly Journal of the Royal Meteorological Society, doi:https://doi.org/10.1002/qj.4763.
 
   Fu, Z., Y. Zhang, X. Li, and X. Rong, (2024), Intercomparison of Two Model Climates Simulated by a Unified Weather-Climate Model System (GRIST), Part I: Mean State. Climate Dynamics.
+
+  Yuan, C., H. Zhang, X. Jing, S. Zhao, and X. Li, 2024: Impact of a New Radiation Scheme on Simulated Climate in the Global–Regional Integrated SysTem Model under Varying Physical Parameterization Schemes. Atmosphere.
 
   Sun, W., J. Li, R. Yu, N. Li, and Y. Zhang, (2024), Exploring changes of precipitation extremes under climate change through global variable-resolution modeling. Science Bulletin, 69(2), 237-247. doi:https://doi.org/10.1016/j.scib.2023.11.013.
 
@@ -23,13 +35,15 @@
 
 **2023:**
 
-  Li, X., Y. Zhang, Y. Lin, X. Peng, B. Zhou, P. Zhai, and J. Li, (2023), Impact of Revised Trigger and Closure of the Double-Plume Convective Parameterization on Precipitation Simulations over East Asia. Advances in Atmospheric Sciences, 40(7), 1225-1243.doi:10.1007/s00376-022-2225-9.
-
   Li, X., Y. Zhang, X. Peng, B. Zhou, J. Li, and Y. Wang, (2023), Intercomparison of the weather and climate physics suites of a unified forecast–climate model system (GRIST-A22.7.28) based on single-column modeling. Geosci. Model Dev., 16(10), 2975-2993.doi:10.5194/gmd-16-2975-2023.
+
+  Li, X., Y. Zhang, Y. Lin, X. Peng, B. Zhou, P. Zhai, and J. Li, (2023), Impact of Revised Trigger and Closure of the Double-Plume Convective Parameterization on Precipitation Simulations over East Asia. Advances in Atmospheric Sciences, 40(7), 1225-1243.doi:10.1007/s00376-022-2225-9.
 
   Zhou, Y., R. Yu, Y. Zhang, and J. Li, (2023), Dynamic and thermodynamic processes related to precipitation diurnal cycle simulated by GRIST. Climate Dynamics.doi:10.1007/s00382-023-06779-7.
 
   Chen, T., J. Li, Y. Zhang, H. Chen, P. Li, and H. Che, (2023), Evaluation of Hourly Precipitation Characteristics from a Global Reanalysis and Variable-Resolution Global Model over the Tibetan Plateau by Using a Satellite-Gauge Merged Rainfall Product. Remote Sensing, 15(4), 1013.
+
+  Zhang, Y., J. Li, H. Zhang, X. Li, L. Dong, X. Rong, C. Zhao, X. Peng, and Y. Wang, 2023: History and Status of Atmospheric Dynamical Core Model Development in China. Numerical Weather Prediction: East Asian Perspectives, S. K. Park, Ed., Springer International Publishing, 3-36.
 
   陈苏阳，张祎，周逸辉，李晓涵，王一鸣，陈昊明. 2023. GRIST模式夏季气候回报试验中东亚降水季节内特征的评估. 气象学报，81（2）：269-285 doi:  10.11676/qxxb2023.20220120.
 

@@ -30,4 +30,5 @@ GRIST模式教程
    SCM
    appendix
    references
+   restart
    support

@@ -1,15 +1,23 @@
 参考文献
 ==============
 
+**2025:**
+
+  Fu, Z., Y. Zhang, X. Li, C. Zhu, H. Liu, X. Rong, and C. li, (2025), Intercomparison of Two Model Climates Simulated by a Unified Weather-Climate Model System (GRIST), Part II: Madden-Julian Oscillation. Climate Dynamics.
+
+  Zhou, Y., R. Yu, Y. Zhang, J. Li, and H. Chen, (2025), Sensitivity of a Kilometer-Scale Variable-Resolution Global Nonhydrostatic Model to Microphysics Schemes in Simulating a Mesoscale Convective System. Advances in Atmospheric Sciences.
+
 **2024:**
   
-  Chen, S., Zhang, Y., Wang, Y., Liu, Z., Li, X., and Xue, W.: Mixed-Precision Computing in the GRIST Dynamical Core for Weather and Climate Modelling, Geosci. Model Dev. Discuss. [preprint], https://doi.org/10.5194/gmd-2024-68, in review, 2024.
+  Chen, S., Y. Zhang, Y. Wang, Z. Liu, X. Li, and W. Xue, (2024), Mixed-precision computing in the GRIST dynamical core for weather and climate modelling. Geosci. Model Dev., 17(16), 6301-6318.doi:10.5194/gmd-17-6301-2024.
 
   Zhang, Y., Liu, Z., Wang, Y. & Chen, S. (2024) Establishing a limited-area model based on a global model: A consistency study. Quarterly Journal of the Royal Meteorological Society, doi:https://doi.org/10.1002/qj.4804.
 
   Li, X., W. Chu, Y. Zhang, and Y. Wang, (2024), Extending a dry-environment convection parameterization to couple with moist turbulence and a baseline evaluation in the GRIST model. Quarterly Journal of the Royal Meteorological Society, doi:https://doi.org/10.1002/qj.4763.
 
   Fu, Z., Y. Zhang, X. Li, and X. Rong, (2024), Intercomparison of Two Model Climates Simulated by a Unified Weather-Climate Model System (GRIST), Part I: Mean State. Climate Dynamics.
+
+  Yuan, C., H. Zhang, X. Jing, S. Zhao, and X. Li, 2024: Impact of a New Radiation Scheme on Simulated Climate in the Global–Regional Integrated SysTem Model under Varying Physical Parameterization Schemes. Atmosphere.
 
   Sun, W., J. Li, R. Yu, N. Li, and Y. Zhang, (2024), Exploring changes of precipitation extremes under climate change through global variable-resolution modeling. Science Bulletin, 69(2), 237-247. doi:https://doi.org/10.1016/j.scib.2023.11.013.
 

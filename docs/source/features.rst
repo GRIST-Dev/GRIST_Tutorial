@@ -33,9 +33,13 @@
   通用物理-动力耦合：
   这是使GRIST动力框架具备实际天气-气候一体化模拟能力的关键。通过设计独立的物理-动力耦合算子和工作流，使得模式的动力框架可以采用不同方式与模式的物理过程进行耦合。在此基础上，已经发展了2套完整物理过程包（天气&气候套件），并均完成了AMIP大气积分试验。   
 
-  参考文献：  
+ 
   1. Zhang, Y., J. Li, R. Yu, S. Zhang, Z. Liu, J. Huang, and Y. Zhou, (2019), A Layer-Averaged Nonhydrostatic Dynamical Framework on an Unstructured Mesh for Global and Regional Atmospheric Modeling: Model Description, Baseline Evaluation, and Sensitivity Exploration. Journal of Advances in Modeling Earth Systems, 11(6), 1685-1714.doi: https://doi.org/10.1029/2018MS001539    
-  2. Zhang, Y., J. Li, R. Yu, Z. Liu, Y. Zhou, X. Li, and X. Huang, (2020), A Multiscale Dynamical Model in a Dry-Mass Coordinate for Weather and Climate Modeling: Moist Dynamics and Its Coupling to Physics. Monthly Weather Review, 148(7), 2671-2699.DOI: https://doi.org/10.1175/MWR-D-19-0305.1    
+
+
+  2. Zhang, Y., J. Li, R. Yu, Z. Liu, Y. Zhou, X. Li, and X. Huang, (2020), A Multiscale Dynamical Model in a Dry-Mass Coordinate for Weather and Climate Modeling: Moist Dynamics and Its Coupling to Physics. Monthly Weather Review, 148(7), 2671-2699.DOI: https://doi.org/10.1175/MWR-D-19-0305.1   
+
+
   3. Zhang, Y., Z. Liu, Y. Wang, and S. Chen, (2024), Establishing a limited-area model based on a global model: A consistency study. Quarterly Journal of the Royal Meteorological Society, 150(764), 4049-4065.doi:https://doi.org/10.1002/qj.4804.     
 
 物理过程
@@ -56,21 +60,33 @@
 ----------------
    
    1. Zhang, Y., R. Yu, J. Li, X. Li, X. Rong, X. Peng, and Y. Zhou, (2021), AMIP Simulations of a Global Model for Unified Weather-Climate Forecast: Understanding Precipitation Characteristics and Sensitivity Over East Asia. Journal of Advances in Modeling Earth Systems, 13(11), e2021MS002592.doi:https://doi.org/10.1029/2021MS002592.   
+
+
    2. Li, X., Y. Zhang, X. Peng, W. Chu, Y. Lin, and J. Li, (2022), Improved Climate Simulation by Using a Double-Plume Convection Scheme in a Global Model. Journal of Geophysical Research: Atmospheres, 127(11), e2021JD036069.doi:https://doi.org/10.1029/2021JD036069.   
+
+
    3. Fu, Z., Y. Zhang, X. Li, and X. Rong, (2024), Intercomparison of Two Model Climates Simulated by a Unified Weather-Climate Model System (GRIST), Part I: Mean State. Climate Dynamics.doi: https://doi.org/10.1007/s00382-024-07205-2.   
+
+   
    4. Fu, Z., Y. Zhang, X. Li, C. Zhu, H. Liu, X. Rong, and C. li, (2025), Intercomparison of Two Model Climates Simulated by a Unified Weather-Climate Model System (GRIST), Part II: Madden-Julian Oscillation. Climate Dynamics.   
 
 模式框架中英文简介
 ----------------
    
    1. 王一鸣，张祎，李晓涵，刘壮，周逸辉. 2024. GRIST天气-气候一体化模式系统框架功能设计和应用[J]. 气象科技进展. http://www.cmalibrary.cn/amst/2024/202404/fmbd/202409/t20240927_165283.htm   
+
+
    2. Zhang, Y., J. Li, H. Zhang, X. Li, L. Dong, X. Rong, C. Zhao, X. Peng, and Y. Wang, 2023: History and Status of Atmospheric Dynamical Core Model Development in China.   Numerical Weather Prediction: East Asian Perspectives, S. K. Park, Ed., Springer International Publishing, 3-36.   
 
 关键应用评估
 ----------------
    
-   1. Zhou, Y., Y. Zhang, J. Li, R. Yu, and Z. Liu, (2020), Configuration and evaluation of a global unstructured mesh atmospheric model (GRIST-A20.9) based on the variable-resolution approach. Geosci. Model Dev., 13(12), 6325-6348.doi:https://doi.org/10.5194/gmd-13-6325-2020. (变分辨率模拟)   
-   2. Zhang, Y., X. Li, Z. Liu, X. Rong, J. Li, Y. Zhou, and S. Chen, (2022), Resolution Sensitivity of the GRIST Nonhydrostatic Model From 120 to 5 km (3.75 km) During the DYAMOND Winter. Earth and Space Science, 9(9), e2022EA002401.doi:https://doi.org/10.1029/2022EA002401. (全球风暴解析模拟)  
+   1. Zhou, Y., Y. Zhang, J. Li, R. Yu, and Z. Liu, (2020), Configuration and evaluation of a global unstructured mesh atmospheric model (GRIST-A20.9) based on the variable-resolution approach. Geosci. Model Dev., 13(12), 6325-6348.doi:https://doi.org/10.5194/gmd-13-6325-2020. (变分辨率模拟)  
+
+
+   2. Zhang, Y., X. Li, Z. Liu, X. Rong, J. Li, Y. Zhou, and S. Chen, (2022), Resolution Sensitivity of the GRIST Nonhydrostatic Model From 120 to 5 km (3.75 km) During the DYAMOND Winter. Earth and Space Science, 9(9), e2022EA002401.doi:https://doi.org/10.1029/2022EA002401. (全球风暴解析模拟)   
+
+
    ...
    
    

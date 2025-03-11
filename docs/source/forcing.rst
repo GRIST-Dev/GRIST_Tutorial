@@ -30,12 +30,12 @@
 ~~~~~~~~~~~~~~~~
 目前GRIST模式支持三种强迫数据读取模式，用户可根据不同需求制作相应类型的强迫场（仅时间维有差异）分别为：
 
-**1.	AMIP模态：该模态遵循经典大气模式比较计划试验（AMIP）规定的逐月海温强迫模式。每个文件包含一个整数十年及相邻的两个月份数据（例如，196912-198001)。**
+**1.	AMIP模态：该模态遵循经典大气模式比较计划试验（AMIP）规定的逐月海温强迫模式。每个文件包含一个整数十年及相邻的两个月份数据（例如，197912-199001)。**
 
 *AMIP模态参考namelist设置：（参考文件名：realNoMissERA5SstSic.1980.GRIST.2621442.nc)*
 ::
   numMonSST              = 122 #AMIP模式必须为122，且每10年一个文件
-  sstFile_year_beg       = 1980 #起始日期
+  sstFile_year_beg       = 1980 #起始日期, 必须是整数年代的起始年
   real_sst_style         = 'AMIP' #强迫数据模态
   sstFileNameHead        = 'realNoMissERA5SstSic.' #强迫数据文件前缀
   sstFileNameTail        = '.GRIST.2621442.nc'#强迫数据文件后缀
@@ -45,7 +45,7 @@
 *CYCLE模态参考namelist设置：（参考文件名：realNoMissERA5SstSicCYCLE.GRIST.2621442.nc）*
 ::
  numMonSST              = 12 #AMIP模式必须为12
- sstFile_year_beg       = 2021  #起始日期
+ sstFile_year_beg       = 2021  #（此模态此变量无效）
  real_sst_style         = 'CYCLE' #强迫数据模态
  sstFileNameHead        = 'realNoMissERA5SstSicCYCLE.' #强迫数据文件前缀
  sstFileNameTail        = '.GRIST.2621442.nc' #强迫数据文件后缀
@@ -54,7 +54,7 @@
 *DAILY模态参考namelist设置：（参考文件名：realNoMissERA5SstSic.daily20080717.G9B3.nc）*
 ::
  numMonSST              = 1 #AMIP模式必须为1，然后逐文件读取
- sstFile_year_beg       = 2021  #起始日期
+ sstFile_year_beg       = 2021  #(此模态此变量无效）
  real_sst_style         = 'DAILY' #强迫数据模态
  sstFileNameHead        = 'realNoMissERA5SstSic.' #强迫数据文件前缀
  sstFileNameTail        = '.G9B3.nc' #强迫数据文件后缀

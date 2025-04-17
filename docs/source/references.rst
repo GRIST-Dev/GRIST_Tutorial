@@ -9,9 +9,9 @@
 
   Duan Xiaohui, Yi Zhang, Kai Xu, Haohuan Fu, Bin Yang, Yiming Wang, Yilun Han, Siyuan Chen, Zhuangzhuang Zhou, Chenyu Wang, Dongqiang Huang, Huihai An, Xiting Ju, Haopeng Huang, Zhuang Liu, Wei Xue, Weiguo Liu, Bowen Yan, Jianye Hou, Maoxue Yu, Wenguang Chen, Jian Li, Zhao Jing, Hailong Liu, Lixin Wu, (2025), An AI-Enhanced 1km-Resolution Seamless Global Weather and Climate Model to Achieve Year-Scale Simulation Speed using 34 Million Cores. ACM PPoPP 2025, Main Conference.
 
-  段晓辉等，人工智能增强的全球公里级分辨率气候模拟，2024CCF全国高性能计算学术年会. 大会论文集. 中国计算机学会. https://ccf.org.cn/hpcchina2024.
-
   郜婕，容新尧，张祎，付振，林鹏飞. 2025. 基于ESMF/NUOPC耦合框架的GRIST-WW3气-浪耦合模式及其数值模拟初探. 气象学报.
+
+  段晓辉等，人工智能增强的全球公里级分辨率气候模拟，2024CCF全国高性能计算学术年会. 大会论文集. 中国计算机学会. https://ccf.org.cn/hpcchina2024.
 
 **2024:**
   
